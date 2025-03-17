@@ -1,0 +1,17 @@
+RewriteEngine On
+
+# Prevent direct access to app/ and includes/ directories
+RewriteRule ^(app|includes)/ - [F,L]
+
+# Set public/index.php as the main index file
+DirectoryIndex public/index.php
+
+# Remove /public/ from the URL
+RewriteCond %{REQUEST_URI} ^/public/(.*)$ [NC]
+RewriteRule ^public/(.*)$ /$1 [L,R=301]
+
+
+# Redirect all other requests to public/index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ public/index.php?page=$1 [L,QSA]
