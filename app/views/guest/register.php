@@ -1,6 +1,6 @@
 <div class="container d-flex justify-content-center">
       <div class="register-container custom-register box">
-        <h3 class="text-center display-6 font-weight-bold">Register</h3>
+        <h3 class="text-center display- font-weight-bold">Register</h3>
         <br />
         <form id="registerForm">
           <div class="mb-2">
@@ -19,14 +19,14 @@
               required
             />
           </div>
-          <div class="mb-2">
+          <!-- <div class="mb-2">
             <input
               type="text"
               class="form-control"
               placeholder="Phone"
               required
-            />
-          </div>
+            /> 
+          </div> -->
           <div class="mb-2">
             <input
               type="email"
@@ -63,7 +63,7 @@
         </form>
         <div class="text-center mt-3">
           Already have an account?
-          <a href="#" class="fw-bold text-decoration-none text-dark">Login</a>
+          <a href="index.php?page=login" class="fw-bold text-decoration-none text-dark">Login</a>
         </div>
       </div>
     </div>

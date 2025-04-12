@@ -23,7 +23,7 @@
             <i class="bi bi-eye-slash" id="togglePassword"></i>
           </div>
           <div class="mb-3 text-end">
-            <a href="#" class="text-decoration-none text-dark"
+            <a href="index.php?page=forgot" class="text-decoration-none text-dark"
               >Forgot Password?</a
             >
           </div>
@@ -44,12 +44,12 @@
           <button class="btn btn-outline-danger">
             <i class="fab fa-google"></i>
           </button>
-          <button class="btn btn-outline-primary">
+          <!-- <button class="btn btn-outline-primary">
             <i class="fab fa-facebook-f"></i>
           </button>
           <button class="btn btn-outline-dark">
             <i class="fab fa-apple"></i>
-          </button>
+          </button> -->
         </div>
         <div class="text-center mt-3">
           Don't have an account?

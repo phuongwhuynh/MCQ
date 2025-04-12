@@ -42,8 +42,6 @@
         <a href="index.php?page=register" class="btn btn-primary btn-sm ms-2">Get Started</a>
       </div>
     </div>
-
-
   </div>
 </nav>
 
