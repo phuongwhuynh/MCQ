@@ -1,61 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>About Us - iExam</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-    />
     <style>
-      body {
+      div {
         background-color: #f8f9fa;
-        /* Light grey background */
         font-family: sans-serif;
-        /* Basic clean font */
       }
 
       .section {
         margin: 40px 0;
-        /* Spacing between sections */
         padding: 30px;
         background-color: #ffffff;
-        /* White background for sections */
         border-radius: 8px;
-        /* Slightly rounded corners */
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        /* Subtle shadow */
       }
 
       .section h2 {
         margin-bottom: 20px;
-        /* Space below section titles */
         color: #343a40;
-        /* Darker heading color */
       }
 
       .feature-icon {
         font-size: 2rem;
-        /* Icon size */
         color: #0d6efd;
-        /* Bootstrap primary blue */
         width: 40px;
-        /* Fixed width for alignment */
         text-align: center;
       }
 
       .team-icon {
         font-size: 1.5rem;
-        /* Slightly smaller icon for team */
         color: #6c757d;
-        /* Bootstrap secondary grey */
         width: 30px;
-        /* Fixed width */
         text-align: center;
       }
 
@@ -78,7 +50,6 @@
     </style>
   </head>
 
-  <body>
     <div class="container mt-5 mb-5">
       <h1 class="text-center my-4">About iExam</h1>
 
@@ -210,6 +181,4 @@
       </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-  </body>
-</html>
+
