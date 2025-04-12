@@ -6,10 +6,10 @@ DROP TABLE IF EXISTS users;
 CREATE TABLE users (
 	user_id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(50) NOT NULL,
-    password CHAR(255) NOT NULL,
+    password_hash CHAR(255) NOT NULL,
 	email VARCHAR(255),
     name VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-    role ENUM( 'admin','user')
+    role ENUM('admin','user')
 );
 
 DROP TABLE IF EXISTS admin;
@@ -35,9 +35,9 @@ CREATE TABLE test (
     creator INT UNSIGNED,
     created_time datetime,
     status ENUM('public','private','deleted') NOT NULL,
+	image_path VARCHAR(255),
     FOREIGN KEY (creator) REFERENCES admin(user_id) 
 );
-
 
 
 DROP TABLE IF EXISTS question;
@@ -73,8 +73,10 @@ DROP TABLE IF EXISTS question_category;
 CREATE TABLE question_category(
 	question_id INT UNSIGNED,
     cate VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+    PRIMARY KEY(question_id,cate),
     FOREIGN KEY(question_id) REFERENCES question(question_id),
     FOREIGN KEY(cate) REFERENCES category(cate)
+    
 );
 
 DROP TABLE IF EXISTS test_attempt;

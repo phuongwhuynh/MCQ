@@ -4,7 +4,7 @@ class User {
     static public function authenticate($username,$password) {
         try {
             $db = Database::connect();
-            $query = "SELECT user_id, password_hash,role FROM accounts WHERE username = ? and status='active'";
+            $query = "SELECT user_id, password_hash,role FROM users WHERE username = ? ";
             $stmt = $db->prepare($query);
             $stmt->bind_param("s", $username);  
             $stmt->execute();
@@ -28,8 +28,7 @@ class User {
         try {
             $db = Database::connect();
     
-            // Check if username already exists
-            $query = "SELECT user_id FROM accounts WHERE username = ?";
+            $query = "SELECT user_id FROM users WHERE username = ?";
             $stmt = $db->prepare($query);
             $stmt->bind_param("s", $username);
             $stmt->execute();
@@ -40,7 +39,7 @@ class User {
     
             $passwordHash = password_hash($password, PASSWORD_DEFAULT);
     
-            $query = "INSERT INTO accounts (username, password_hash, email, name, role) VALUES (?, ?, ?, ?, 'user')";
+            $query = "INSERT INTO users (username, password_hash, email, name, role) VALUES (?, ?, ?, ?, 'user')";
             $stmt = $db->prepare($query);
             $stmt->bind_param("ssss", $username, $passwordHash,$email,$name);
             $stmt->execute();
@@ -48,7 +47,7 @@ class User {
             return ["success" => true, "message" => "Account created successfully!"];
         } catch (mysqli_sql_exception $e) {
             error_log("User::signUp error: " . $e->getMessage());
-            return ["success" => false, "message" => "An error occurred. Please try again later."];
+            return ["success" => false, "message" => $e->getMessage()];
 
         }
     

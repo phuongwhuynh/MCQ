@@ -2,13 +2,14 @@
       <div class="login-container custom-width box">
         <h1 class="text-center display-6 font-weight-bold">Sign In</h1>
         <br />
-        <form>
-        <div>
+        <form onsubmit="login(event)">
+        
           <div class="mb-3">
             <input
               type="text"
               class="form-control"
-              placeholder="Email, phone & username"
+              name="username"
+              placeholder="username"
               required
             />
           </div>
@@ -17,16 +18,13 @@
               type="password"
               class="form-control"
               id="password"
+              name="password"
               placeholder="Password"
               required
             />
             <i class="bi bi-eye-slash" id="togglePassword"></i>
           </div>
-          <div class="mb-3 text-end">
-            <a href="index.php?page=forgot" class="text-decoration-none text-dark"
-              >Forgot Password?</a
-            >
-          </div>
+
           <div class="d-flex justify-content-center">
             <button type="submit" class="btn btn-primary w-100 sign-in-color">
               Sign in
