@@ -5,7 +5,7 @@ class PageController {
 
     public static function loadPage($page) {
         if ($_SESSION['user_role']==='student'){
-
+            
         }
         else if ($_SESSION['user_role']==='teacher'){
 
