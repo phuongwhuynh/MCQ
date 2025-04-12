@@ -8,10 +8,9 @@
     href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
     rel="stylesheet"
   />
-  <script
-    src="https://kit.fontawesome.com/a076d05399.js"
-    crossorigin="anonymous"
-  ></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <link rel="stylesheet" href="public/css/layout.css">
   <?php 
@@ -25,16 +24,17 @@
 <body>
 <header>
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
-  <div class="container">
+  <div class="container-fluid">
+    <!-- Brand -->
     <a class="navbar-brand text-primary fw-bold" href="#">iExam</a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarNav"
-    >
+
+    <!-- Navbar toggler (on mobile) -->
+
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
+    <!-- Collapsible nav links -->
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto">
         <li class="nav-item"><a class="nav-link" href="index.php?page=home">Home</a></li>
@@ -42,10 +42,17 @@
         <li class="nav-item"><a class="nav-link" href="index.php?page=resources">Resources</a></li>
         <li class="nav-item"><a class="nav-link" href="index.php?page=contact">Contact</a></li>
       </ul>
-      <a href="index.php?page=register" class="btn btn-primary ms-3">Get Started</a>
+      <div class="d-flex justify-content-end ms-auto">
+        <a href="index.php?page=login" class="btn btn-outline-dark btn-sm ms-2">Login</a>
+        <a href="index.php?page=register" class="btn btn-primary btn-sm ms-2">Get Started</a>
+      </div>
     </div>
+
+
   </div>
 </nav>
+
+
 </header>
 <main>
   <?php include($content); ?>

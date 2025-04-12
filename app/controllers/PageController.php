@@ -16,7 +16,7 @@ class PageController {
     }
 
     private static function loadGuestView($page) {
-        $allowedPages = ["home"/*, "order", "activity", "history"*/];
+        $allowedPages = ["home","login","register"];
         if (!in_array($page, $allowedPages)) {
             require_once "../app/views/404.php";
         }

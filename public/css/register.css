@@ -1,0 +1,68 @@
+.register-container {
+    max-width: 400px;
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 50px;
+  }
+.password-container {
+    position: relative;
+}
+input[type="password"]::-ms-reveal {
+    display: none;
+}
+.password-container i {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+}
+
+.divider hr {
+    flex: 1;
+    border: none;
+    height: 1px;
+    background-color: #000000;
+    margin: 10px;
+}
+
+.divider span {
+    padding: 0 10px;
+    font-weight: bold;
+}
+.sign-in-color {
+    background-color: #563dff;
+}
+.box {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: -14px 10px 40px rgba(0, 0, 0, 0.3);
+}
+.custom-width {
+    width: 40%;
+    max-width: 1200px;
+}
+.custom-register {
+    width: 50%;
+    max-width: 1200px;
+    height: 600px;
+    max-height: 12000px;
+}
+form div {
+    margin: 15px;
+}
+form button {
+    height: 45px;
+}
+#registerForm div {
+    margin-left: 70px;
+    margin-right: 70px;
+}  
