@@ -39,6 +39,15 @@ CREATE TABLE test (
     FOREIGN KEY (creator) REFERENCES admin(user_id) 
 );
 
+DROP TABLE IF EXISTS admin_cur_test;
+CREATE TABLE admin_cur_test (
+    creator INT UNSIGNED PRIMARY KEY,
+    total_time INT UNSIGNED,
+	image_path VARCHAR(255),
+    FOREIGN KEY(creator) REFERENCES admin(user_id)
+);
+
+
 
 DROP TABLE IF EXISTS question;
 CREATE TABLE question (
@@ -51,6 +60,28 @@ CREATE TABLE question (
 	correct_answer ENUM('1','2','3','4') NOT NULL,
     image_path VARCHAR(255),
     creator INT UNSIGNED,
+    FOREIGN KEY(creator) REFERENCES admin(user_id)
+);
+
+DROP TABLE IF EXISTS admin_cur_test_have_questions;
+CREATE TABLE admin_cur_test_have_questions (
+    creator INT UNSIGNED,
+    question_id INT UNSIGNED,
+    PRIMARY KEY(creator,question_id),
+    FOREIGN KEY(creator) REFERENCES admin(user_id),
+	FOREIGN KEY(question_id) REFERENCES question(question_id)
+);
+
+DROP TABLE IF EXISTS admin_cur_question;
+CREATE TABLE admin_cur_question (
+    creator INT UNSIGNED PRIMARY KEY,
+    description TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+    ans1 TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+    ans2 TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+    ans3 TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+    ans4 TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+	correct_answer ENUM('1','2','3','4') NOT NULL,
+    image_path VARCHAR(255),
     FOREIGN KEY(creator) REFERENCES admin(user_id)
 );
 
