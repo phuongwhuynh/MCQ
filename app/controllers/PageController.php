@@ -21,8 +21,8 @@ class PageController {
             require_once "../app/views/404.php";
         }
         else {
-            $content =  "../app/views/guest/$page.php";
-            require_once "../app/views/guest/layout.php";
+            $content =  "../app/views/user/$page.php";
+            require_once "../app/views/user/layout.php";
         }
     }
 

@@ -38,15 +38,26 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
-            <li class="nav-item"><a class="nav-link <?php echo ($page == 'home') ? 'active' : ''; ?>" href="index.php?page=home">Home</a></li>
-            <li class="nav-item"><a class="nav-link <?php echo ($page == 'about') ? 'active' : ''; ?>" href="index.php?page=about">About</a></li>
-            <li class="nav-item"><a class="nav-link <?php echo ($page == 'resources') ? 'active' : ''; ?>" href="index.php?page=resources">Resources</a></li>
-            <li class="nav-item"><a class="nav-link <?php echo ($page == 'contact') ? 'active' : ''; ?>" href="index.php?page=contact">Contact</a></li>
+            <li class="nav-item"><a class="nav-link active" href="index.php?page=home">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="index.php?page=about">About</a></li>
+            <li class="nav-item"><a class="nav-link" href="index.php?page=resources">Resources</a></li>
+            <li class="nav-item"><a class="nav-link" href="index.php?page=contact">Contact</a></li>
           </ul>
+          <?php if ($_SESSION['user_role']==="user"): ?>
+          <button class="img" style="border: none; background: none; padding: 0;">
+            <svg class="ms-3" xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+              </svg>
+
+          </button>
+          <button class="btn btn-primary ms-3" onclick="logout()">Logout</button>
+          <?php else: ?>
           <div class="d-flex justify-content-end me-5">
             <a href="index.php?page=login" class="btn btn-outline-dark ms-2">Login</a>
             <a href="index.php?page=register" class="btn btn-primary ms-3">Get Started</a>
           </div>
+          <?php endif; ?>
         </div>
       </div>
     </nav>
