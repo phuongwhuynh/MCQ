@@ -6,31 +6,26 @@ DROP TABLE IF EXISTS users;
 CREATE TABLE users (
 	user_id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(50) NOT NULL,
-    password CHAR(255) NOT NULL,
+    password_hash CHAR(255) NOT NULL,
 	email VARCHAR(255),
     name VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-    role ENUM('moderator', 'admin','registered_user')
+    role ENUM('admin','user')
 );
 
-DROP TABLE IF EXISTS moderator;
-CREATE TABLE moderator (
-	user_id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    FOREIGN KEY(user_id) REFERENCES users(user_id)
-);
-
-DROP TABLE IF EXISTS teacher;
-CREATE TABLE teacher (
+DROP TABLE IF EXISTS admin;
+CREATE TABLE admin (
 	user_id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     status ENUM('active','deleted') NOT NULL,
     FOREIGN KEY(user_id) REFERENCES users(user_id)
 );
 
-DROP TABLE IF EXISTS student;
-CREATE TABLE student (
+DROP TABLE IF EXISTS user;
+CREATE TABLE user (
 	user_id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
 	status ENUM('active','deleted') NOT NULL,
     FOREIGN KEY(user_id) REFERENCES users(user_id)
 );
+
 
 DROP TABLE IF EXISTS test;
 CREATE TABLE test (
@@ -39,18 +34,11 @@ CREATE TABLE test (
     number_of_questions SMALLINT UNSIGNED,
     creator INT UNSIGNED,
     created_time datetime,
-    status ENUM('active','deleted') NOT NULL,
-    FOREIGN KEY (creator) REFERENCES teacher(user_id) 
+    status ENUM('public','private','deleted') NOT NULL,
+	image_path VARCHAR(255),
+    FOREIGN KEY (creator) REFERENCES admin(user_id) 
 );
 
-DROP TABLE IF EXISTS allowed_list;
-CREATE TABLE allowed_list (
-	test_id INT UNSIGNED,
-    user_id INT UNSIGNED,
-    PRIMARY KEY(test_id, user_id),
-    FOREIGN KEY(test_id) REFERENCES test(test_id),
-    FOREIGN KEY(user_id) REFERENCES student(user_id)
-);
 
 DROP TABLE IF EXISTS question;
 CREATE TABLE question (
@@ -63,7 +51,7 @@ CREATE TABLE question (
 	correct_answer ENUM('1','2','3','4') NOT NULL,
     image_path VARCHAR(255),
     creator INT UNSIGNED,
-    FOREIGN KEY(creator) REFERENCES teacher(user_id)
+    FOREIGN KEY(creator) REFERENCES admin(user_id)
 );
 
 DROP TABLE IF EXISTS test_have_question;
@@ -85,8 +73,10 @@ DROP TABLE IF EXISTS question_category;
 CREATE TABLE question_category(
 	question_id INT UNSIGNED,
     cate VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+    PRIMARY KEY(question_id,cate),
     FOREIGN KEY(question_id) REFERENCES question(question_id),
     FOREIGN KEY(cate) REFERENCES category(cate)
+    
 );
 
 DROP TABLE IF EXISTS test_attempt;
@@ -98,7 +88,7 @@ CREATE TABLE test_attempt(
     score SMALLINT UNSIGNED,
     user_id INT UNSIGNED,
     test_id INT UNSIGNED,
-    FOREIGN KEY(user_id) REFERENCES student(user_id),
+    FOREIGN KEY(user_id) REFERENCES user(user_id),
     FOREIGN KEY(test_id) REFERENCES test(test_id)
 );
 

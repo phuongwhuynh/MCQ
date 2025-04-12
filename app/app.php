@@ -16,6 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET" && isset($_GET['ajax']) && $_GET['ajax'
         echo json_encode(["success" => false, "message" => "Invalid request"]);
     }
 } else if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
     $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
     
     $data = [];
@@ -31,6 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET" && isset($_GET['ajax']) && $_GET['ajax'
             $actionName = $data['action'];
 
             if (method_exists($controller[$controllerName], $actionName)) {
+
                 $controller[$controllerName]::$actionName($data);  
             } else {
                 echo json_encode(["success" => false, "message" => "Method not found"]);
@@ -45,13 +47,8 @@ if ($_SERVER["REQUEST_METHOD"] === "GET" && isset($_GET['ajax']) && $_GET['ajax'
 
 else {
     
-    if ($_SESSION['user_role']=='admin'){
-        $page = isset($_GET['page']) ? $_GET['page'] : 'menuAdmin';
-        if ($page=='home') $page='menuAdmin';
-    }
-    else {
-        $page = isset($_GET['page']) ? $_GET['page'] : 'home';
-    }
+
+    $page = isset($_GET['page']) ? $_GET['page'] : 'home';
     PageController::loadPage($page);
 }
 

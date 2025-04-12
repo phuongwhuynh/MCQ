@@ -1,12 +1,23 @@
-<div class="container d-flex justify-content-center">
-      <div class="register-container custom-register box">
-        <h3 class="text-center display-6 font-weight-bold">Register</h3>
-        <br />
+<div class="container d-flex flex-column align-items-center justify-content-center">
+      <div class="register-container custom-register">
+        <h3 class="text-center display- font-weight-bold">Register</h3>
+        <div class="password-requirements">
+          <h4>Password Requirements:</h4>
+          <ul>
+            <li>At least 8 characters</li>
+            <li>At least one uppercase letter (A-Z)</li>
+            <li>At least one lowercase letter (a-z)</li>
+            <li>At least one number (0-9)</li>
+            <li>At least one special character (e.g., !@#$%^&*)</li>
+          </ul>
+        </div>
         <form id="registerForm">
           <div class="mb-2">
             <input
               type="text"
               class="form-control"
+              id="name"
+              name="name"
               placeholder="Name"
               required
             />
@@ -15,7 +26,20 @@
             <input
               type="text"
               class="form-control"
+              id="lastName"
+              name="lastName"
               placeholder="Last Name"
+              required
+            />
+          </div>
+
+          <div class="mb-2">
+            <input
+              type="email"
+              class="form-control"
+              id="email"
+              name="email"
+              placeholder="Email"
               required
             />
           </div>
@@ -23,23 +47,18 @@
             <input
               type="text"
               class="form-control"
-              placeholder="Phone"
+              id="username"
+              name="username"
+              placeholder="Username"
               required
-            />
-          </div>
-          <div class="mb-2">
-            <input
-              type="email"
-              class="form-control"
-              placeholder="Email"
-              required
-            />
+            /> 
           </div>
           <div class="mb-2 password-container">
             <input
               type="password"
               class="form-control"
               id="password"
+              name="password"
               placeholder="Password"
               required
             />
@@ -57,13 +76,14 @@
           </div>
           <div class="d-flex justify-content-center">
             <button type="submit" class="btn btn-primary w-100 sign-in-color">
-              Sign in
+              Register
             </button>
           </div>
         </form>
         <div class="text-center mt-3">
           Already have an account?
-          <a href="#" class="fw-bold text-decoration-none text-dark">Login</a>
+          <a href="index.php?page=login" class="fw-bold text-decoration-none text-dark">Login</a>
         </div>
       </div>
-    </div>
+</div>
+
