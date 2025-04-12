@@ -38,18 +38,43 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
-            <li class="nav-item"><a class="nav-link active" href="index.php?page=home">Home</a></li>
-            <li class="nav-item"><a class="nav-link" href="index.php?page=about">About</a></li>
-            <li class="nav-item"><a class="nav-link" href="index.php?page=resources">Resources</a></li>
-            <li class="nav-item"><a class="nav-link" href="index.php?page=contact">Contact</a></li>
+            <li class="nav-item"><a class="nav-link <?php echo ($page == 'home') ? 'active' : ''; ?>" href="index.php?page=home">Home</a></li>
+            <li class="nav-item"><a class="nav-link <?php echo ($page == 'about') ? 'active' : ''; ?>" href="index.php?page=about">About</a></li>
+            <?php if ($_SESSION['user_role']==="user"): ?>
+            <li class="nav-item"><a class="nav-link <?php echo ($page == 'dashboard') ? 'active' : ''; ?>" href="index.php?page=dashboard">Dashboard</a></li>
+            <?php endif; ?>
+            <li class="nav-item"><a class="nav-link <?php echo ($page == 'resources') ? 'active' : ''; ?>" href="index.php?page=resources">Resources</a></li>
+            <li class="nav-item"><a class="nav-link <?php echo ($page == 'contact') ? 'active' : ''; ?>" href="index.php?page=contact">Contact</a></li>
           </ul>
-          <button class="img" style="border: none; background: none; padding: 0;">
-            <svg class="ms-3" xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
-                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
-                <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
-              </svg>
-          </button>
-          <button class="btn btn-primary ms-3" onclick="logout()">Logout</button>
+          <?php if ($_SESSION['user_role']==="user"): ?>
+          <div class="d-flex justify-content-end me-5 align-items-center ms-3">
+            <!-- <button class="img" style="border: none; background: none; padding: 0;">
+              <svg class="ms-3" xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                  <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                  <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+                </svg>
+            </button> -->
+            <div class="dropdown">
+              <button class="btn dropdown-toggle border-0 bg-transparent p-0" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <svg class="ms-3" xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                  <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                  <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+                </svg>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end shadow-sm p-3" aria-labelledby="userDropdown" style="min-width: 220px;">
+                <li class="mb-2"><span class="fw-semibold">Welcome back, <?php echo $_SESSION['username'] ?? 'User'; ?>!</span></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="index.php?page=history"><i class="bi bi-clock-history me-2"></i>History</a></li>
+              </ul>
+            </div>
+            <button class="btn btn-primary ms-3" onclick="logout()">Logout</button>
+          </div>
+          <?php else: ?>
+          <div class="d-flex justify-content-end me-5">
+            <a href="index.php?page=login" class="btn btn-outline-dark ms-2">Login</a>
+            <a href="index.php?page=register" class="btn btn-primary ms-3">Get Started</a>
+          </div>
+          <?php endif; ?>
         </div>
       </div>
     </nav>
@@ -59,13 +84,11 @@
 <main>
   <?php include($content); ?>
 </main>
-<footer class="footer container-fluid my-5">
+<footer class="footer container-fluid mt-5 mb-2">
   <div class="container">
-    
-    
     <div class="row">
       <div class="col-sm-8">
-        <p class="m-0 mt-1">Teacher who do not have a school account (or forgot their password)</p>
+        <!-- <p class="m-0 mt-1">Teacher who do not have a school account (or forgot their password)</p> -->
         <p class="m-0">Please contact the our hotline to receive support</p>
         <br>
         <p class="m-0">Email: minh.phan04@hcmut.edu.vn</p>
@@ -79,7 +102,7 @@
             <p class="m-1"><a class="text-dark text-decoration-none" href="index.php?page=contact">Contact us</a></p>
             <p class="m-1"><a class="text-dark text-decoration-none" href="index.php?page=resources">Resources</a></p>
           </div>
-          
+          <?php if ($_SESSION['user_role']==="guest"): ?>
           <div class="col d-flex flex-column align-items-center p-3">
             <div class="btn-block">
               <div>
@@ -88,9 +111,9 @@
               <div>
                 <a href="index.php?page=login" class="btn btn-outline-primary m-1 w-100">Login</a>
               </div>
-
             </div>
           </div>
+          <?php endif; ?>
         </div>
       </div>
     </div>

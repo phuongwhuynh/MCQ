@@ -1,0 +1,49 @@
+    /* div {
+    background-color: #f8f9fa;
+    font-family: sans-serif;
+    } */
+
+    .section {
+        margin: 40px 0;
+        padding: 30px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    
+        .section h2 {
+        margin-bottom: 20px;
+        color: #343a40;
+        }
+    
+        .feature-icon {
+        font-size: 2rem;
+        color: #0d6efd;
+        width: 40px;
+        text-align: center;
+        }
+    
+        .team-icon {
+        font-size: 1.5rem;
+        color: #6c757d;
+        width: 30px;
+        text-align: center;
+        }
+    
+    .map-container {
+        overflow: hidden;
+        padding-bottom: 56.25%;
+        /* 16:9 aspect ratio */
+        position: relative;
+        height: 0;
+        }
+    
+    .map-container iframe {
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        border: 0;
+        }
+    
