@@ -1,0 +1,71 @@
+<div class="container mt-5">
+        <h1 class="text-center mb-4">Multiple Choice Test Form</h1>
+        <form id="testForm">
+            <div id="questions">
+                <div class="question-container mb-4 border p-3 rounded">
+                    <h5>Question 1:</h5>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" name="question[]" placeholder="Enter your question"
+                            required>
+                    </div>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" name="optionA[]" placeholder="Option A" required>
+                    </div>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" name="optionB[]" placeholder="Option B" required>
+                    </div>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" name="optionC[]" placeholder="Option C" required>
+                    </div>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" name="optionD[]" placeholder="Option D" required>
+                    </div>
+                    <span class="remove-button" onclick="removeQuestion(this)">Remove</span>
+                </div>
+            </div>
+            <button type="button" class="btn btn-primary" id="addQuestionButton">Add Question</button>
+            <br><br>
+            <input type="submit" class="btn btn-success" value="Submit">
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let questionCount = 1;
+
+        document.getElementById('addQuestionButton').addEventListener('click', function () {
+            if (questionCount < 50) {
+                questionCount++;
+                const questionContainer = document.createElement('div');
+                questionContainer.className = 'question-container mb-4 border p-3 rounded';
+                questionContainer.innerHTML = `
+                <h5>Question ${questionCount}:</h5>
+                <div class="mb-3">
+                    <input type="text" class="form-control" name="question[]" placeholder="Enter your question" required>
+                </div>
+                <div class="mb-3">
+                    <input type="text" class="form-control" name="optionA[]" placeholder="Option A" required>
+                </div>
+                <div class="mb-3">
+                    <input type="text" class="form-control" name="optionB[]" placeholder="Option B" required>
+                </div>
+                <div class="mb-3">
+                    <input type="text" class="form-control" name="optionC[]" placeholder="Option C" required>
+                </div>
+                <div class="mb-3">
+                    <input type="text" class="form-control" name="optionD[]" placeholder="Option D" required>
+                </div>
+                <span class="remove-button" onclick="removeQuestion(this)">Remove</span>
+            `;
+                document.getElementById('questions').appendChild(questionContainer);
+            } else {
+                alert("Maximum number of questions reached (50).");
+            }
+        });
+
+        function removeQuestion(element) {
+            const questionContainer = element.parentElement;
+            questionContainer.remove();
+            questionCount--;
+        }
+    </script>
