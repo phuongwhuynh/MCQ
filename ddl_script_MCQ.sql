@@ -32,6 +32,21 @@ CREATE TABLE student (
     FOREIGN KEY(user_id) REFERENCES users(user_id)
 );
 
+DROP TABLE IF EXISTS class;
+CREATE TABLE class (
+	class_id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    class_name TEXT NOT NULL,
+    teacher_id INT UNSIGNED NOT NULL,
+    FOREIGN KEY(teacher_id) REFERENCES teacher(teacher_id)
+);
+
+DROP TABLE IF EXISTS in_class;
+CREATE TABLE in_class (
+	class_id INT UNSIGNED,
+    user_id INT UNSIGNED,
+    FOREIGN KEY(teacher_id) REFERENCES teacher(teacher_id)
+);
+
 DROP TABLE IF EXISTS test;
 CREATE TABLE test (
 	test_id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,

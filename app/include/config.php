@@ -1,8 +1,10 @@
 <?php
 require_once "../app/controllers/PageController.php";
+require_once "../app/controllers/UserController.php";
 
 $controller= [
-    "page" => "PageController"
+    "page" => "PageController",
+    "user" => "UserController"
 ];
 
 // $action = [
