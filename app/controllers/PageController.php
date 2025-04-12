@@ -5,10 +5,10 @@ class PageController {
 
     public static function loadPage($page) {
         if ($_SESSION['user_role']==='student'){
-            
+            self::loadUserView($page);
         }
         else if ($_SESSION['user_role']==='teacher'){
-
+            self::loadAdminView($page);
         }
         else {
             self::loadGuestView($page);

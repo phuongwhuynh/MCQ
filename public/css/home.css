@@ -1,0 +1,32 @@
+.hero {
+  background: url("image.png") no-repeat center center/cover;
+  height: 400px;
+  color: white;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.exam-section {
+  padding: 50px 0;
+}
+.exam-card {
+  background: #dbedf5;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.social-icons a {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  background: #e8c7b7;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 5px;
+  color: #2d3e3f;
+  text-decoration: none;
+}
