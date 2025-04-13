@@ -53,6 +53,8 @@
             <div class="container">
               <div class="row">
                 <div class="mb-3">
+                  <label class="form-label" style="font-size:medium">Question Image (optional)</label>
+                  <input type="file" class="form-control mb-1" name="questionImage[]" accept="image/*">
                   <input
                     type="text"
                     class="form-control"
