@@ -36,9 +36,17 @@ class PageController {
             require_once "../app/views/user/layout.php";
         }    
     }
-    private static function loadAdminView($page){
-        /*to do*/
 
+    private static function loadAdminView($page){
+        $allowedPages = ["home","question","test","manage"];
+        if (!in_array($page, $allowedPages)) {
+            require_once "../app/views/404.php";
+        }
+        else {
+            $page .= '_admin';
+            $content =  "../app/views/admin/$page.php";
+            require_once "../app/views/admin/layout_admin.php";
+        }  
     }
 }
 

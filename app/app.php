@@ -32,7 +32,6 @@ if ($_SERVER["REQUEST_METHOD"] === "GET" && isset($_GET['ajax']) && $_GET['ajax'
             $actionName = $data['action'];
 
             if (method_exists($controller[$controllerName], $actionName)) {
-
                 $controller[$controllerName]::$actionName($data);  
             } else {
                 echo json_encode(["success" => false, "message" => "Method not found"]);

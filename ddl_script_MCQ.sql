@@ -26,6 +26,10 @@ CREATE TABLE user (
     FOREIGN KEY(user_id) REFERENCES users(user_id)
 );
 
+DROP TABLE IF EXISTS category;
+CREATE TABLE category (
+	cate VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci PRIMARY KEY
+);
 
 DROP TABLE IF EXISTS test;
 CREATE TABLE test (
@@ -53,6 +57,7 @@ DROP TABLE IF EXISTS question;
 CREATE TABLE question (
 	question_id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     description TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+    cate VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
     ans1 TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
     ans2 TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
     ans3 TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
@@ -60,7 +65,8 @@ CREATE TABLE question (
 	correct_answer ENUM('1','2','3','4') NOT NULL,
     image_path VARCHAR(255),
     creator INT UNSIGNED,
-    FOREIGN KEY(creator) REFERENCES admin(user_id)
+    FOREIGN KEY(creator) REFERENCES admin(user_id),
+	FOREIGN KEY(cate) REFERENCES category(cate)
 );
 
 DROP TABLE IF EXISTS admin_cur_test_have_questions;
@@ -76,12 +82,14 @@ DROP TABLE IF EXISTS admin_cur_question;
 CREATE TABLE admin_cur_question (
     creator INT UNSIGNED PRIMARY KEY,
     description TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+    cate VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
     ans1 TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
     ans2 TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
     ans3 TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
     ans4 TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-	correct_answer ENUM('1','2','3','4') NOT NULL,
+	correct_answer ENUM('1','2','3','4'),
     image_path VARCHAR(255),
+    FOREIGN KEY(cate) REFERENCES category(cate),
     FOREIGN KEY(creator) REFERENCES admin(user_id)
 );
 
@@ -95,20 +103,19 @@ CREATE TABLE test_have_question(
     FOREIGN KEY(question_id) REFERENCES question(question_id)
 );
 
-DROP TABLE IF EXISTS category;
-CREATE TABLE category (
-	cate VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci PRIMARY KEY
-);
 
-DROP TABLE IF EXISTS question_category;
-CREATE TABLE question_category(
-	question_id INT UNSIGNED,
-    cate VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-    PRIMARY KEY(question_id,cate),
-    FOREIGN KEY(question_id) REFERENCES question(question_id),
-    FOREIGN KEY(cate) REFERENCES category(cate)
-    
-);
+
+INSERT INTO category (cate) VALUES ('Math'),('Literature'),('Science'),('History'),('Geography');
+
+-- DROP TABLE IF EXISTS question_category;
+-- CREATE TABLE question_category(
+-- 	question_id INT UNSIGNED,
+--     cate VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+--     PRIMARY KEY(question_id,cate),
+--     FOREIGN KEY(question_id) REFERENCES question(question_id),
+--     FOREIGN KEY(cate) REFERENCES category(cate)
+--     
+-- );
 
 DROP TABLE IF EXISTS test_attempt;
 CREATE TABLE test_attempt(
@@ -132,3 +139,5 @@ CREATE TABLE chosen_answer(
     FOREIGN KEY(question_id) REFERENCES question(question_id),
     FOREIGN KEY(attempt_id) REFERENCES test_attempt(attempt_id)
 );
+
+SELECT * FROM question;

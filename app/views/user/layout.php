@@ -75,9 +75,13 @@
 
 
 </header>
+
+
 <main>
   <?php include($content); ?>
 </main>
+
+
 <footer class="footer container-fluid mt-5 mb-2">
   <div class="container">
     <div class="row">

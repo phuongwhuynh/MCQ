@@ -72,8 +72,21 @@
               placeholder="Enter Password again"
               required
             />
-            <i class="bi bi-eye-slash" id="togglePassword"></i>
+            <i class="bi bi-eye-slash" id="toggleConfirmPassword"></i>
           </div>
+          <div class="mb-4 text-center">
+            <label class="form-label fw-bold d-block m-0">Register As:</label> 
+            <div class="d-flex justify-content-center m-0">
+              <div class="btn-group w-100" style="max-width: 400px;" role="group" aria-label="Role selection">
+                <input type="radio" class="btn-check" name="role" id="userRole" value="user" autocomplete="off" checked />
+                <label class="btn btn-outline-primary w-50" for="userRole">User</label>
+
+                <input type="radio" class="btn-check" name="role" id="adminRole" value="admin" autocomplete="off" />
+                <label class="btn btn-outline-primary w-50" for="adminRole">Admin</label>
+              </div>
+            </div>
+          </div>
+
           <div class="d-flex justify-content-center">
             <button type="submit" class="btn btn-primary w-100 sign-in-color">
               Register

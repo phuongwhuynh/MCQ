@@ -24,7 +24,7 @@ class User {
             return ["success" => false, "message" => $e->getMessage()];
         }
     }
-    static public function signUp($username, $password,$email,$name) {
+    static public function signUp($username, $password, $email, $name, $role) {
         try {
             $db = Database::connect();
     
@@ -37,20 +37,36 @@ class User {
                 return ["success" => false, "message" => "Username already exists!"];
             }
     
+            // Hash password
             $passwordHash = password_hash($password, PASSWORD_DEFAULT);
     
-            $query = "INSERT INTO users (username, password_hash, email, name, role) VALUES (?, ?, ?, ?, 'user')";
+            // Insert user
+            $query = "INSERT INTO users (username, password_hash, email, name, role) VALUES (?, ?, ?, ?, ?)";
             $stmt = $db->prepare($query);
-            $stmt->bind_param("ssss", $username, $passwordHash,$email,$name);
+            $stmt->bind_param("sssss", $username, $passwordHash, $email, $name, $role);
             $stmt->execute();
+    
+            $user_id = $stmt->insert_id;
+    
+            if (strtolower($role) === 'admin') {
+                $query = "INSERT INTO admin (user_id) VALUES (?)";
+                $stmt = $db->prepare($query);
+                $stmt->bind_param("i", $user_id);
+                $stmt->execute();
+            }
+            else if (strtolower($role) === 'user') {
+                $query = "INSERT INTO user (user_id) VALUES (?)";
+                $stmt = $db->prepare($query);
+                $stmt->bind_param("i", $user_id);
+                $stmt->execute();
+            }
     
             return ["success" => true, "message" => "Account created successfully!"];
         } catch (mysqli_sql_exception $e) {
             error_log("User::signUp error: " . $e->getMessage());
             return ["success" => false, "message" => $e->getMessage()];
-
         }
-    
     }
+    
 }
 ?>
