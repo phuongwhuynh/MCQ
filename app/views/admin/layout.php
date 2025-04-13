@@ -1,46 +1,49 @@
 <html lang="en">
+
   <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>Dashboard</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-      rel="stylesheet"
-    />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
+
   <body class="bg-light">
     <div class="container-fluid">
       <div class="row">
         <!-- Sidebar/Navbar -->
-        <nav
-          class="col-md-3 col-lg-2 d-md-block bg-white sidebar navbar navbar-expand-md navbar-light"
-        >
-          <button
-            aria-controls="sidebarMenu"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-            class="navbar-toggler"
-            data-target="#sidebarMenu"
-            data-toggle="collapse"
-            type="button"
-          >
+        <nav class="col-md-3 col-lg-2 d-md-block bg-white sidebar navbar navbar-expand-md navbar-light">
+          <button aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation"
+            class="navbar-toggler" data-target="#sidebarMenu" data-toggle="collapse" type="button">
             <span class="navbar-toggler-icon"> </span>
           </button>
           <div class="collapse navbar-collapse" id="sidebarMenu">
             <div class="sidebar-sticky pt-3 text-center">
               <p class="text-muted">Teacher</p>
-              <img
-                alt="Profile picture of Nguyen Van B"
-                class="rounded-circle img-responsive"
-                style="max-height: 300px"
-                src="https://i.pinimg.com/736x/c6/70/2b/c6702b4c64ff1910d3fc220248cc1907.jpg"
-              />
+              <img alt="Profile picture" class="rounded-circle img-responsive responsive-img"
+                src="https://i.pinimg.com/736x/c6/70/2b/c6702b4c64ff1910d3fc220248cc1907.jpg" />
               <h5>Nguyen Van B</h5>
+              <style>
+                .responsive-img {
+                  max-height: 300px;
+                  /* Default size */
+                }
+
+                @media (max-width: 768px) {
+                  .responsive-img {
+                    max-height: 200px;
+                    /* Default size */
+                  }
+                }
+
+                @media (max-width: 576px) {
+                  .responsive-img {
+                    max-height: 100px;
+                    /* Default size */
+                  }
+                }
+              </style>
               <ul class="nav flex-column mt-4">
                 <li class="nav-item">
                   <a class="nav-link active text-primary" href="#">
@@ -66,28 +69,54 @@
         </nav>
         <!-- Main Content -->
         <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4" role="main">
-          <div
-            class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
-          >
-            <h1 class="h2">Welcome Mr. B</h1>
+          <div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2 responsive-title">Welcome Mr. B</h1>
             <div class="btn-toolbar mb-2 mb-md-0">
-              <div class="btn-group">
-                <i class="fas fa-envelope text-primary pt-4"> </i>
-                <div class="d-flex align-items-center">
-                  <img
-                    alt="Profile picture of Nguyen Van B"
-                    class="rounded-circle img-responsive mx-2"
-                    style="max-height: 50px"
-                    src="https://i.pinimg.com/736x/c6/70/2b/c6702b4c64ff1910d3fc220248cc1907.jpg"
-                  />
-                  <span class="p-1"> Nguyen Van B </span>
-                </div>
-                <button class="btn btn-sm btn-outline-secondary pl-3">
-                  logout
-                </button>
+              <div class="d-flex align-items-center">
+                <img alt="Profile picture of Nguyen Van B" class="rounded-circle img-responsive mx-2"
+                  style="max-height: 50px"
+                  src="https://i.pinimg.com/736x/c6/70/2b/c6702b4c64ff1910d3fc220248cc1907.jpg" />
+                <span class="p-1 responsive-text">Nguyen Van B</span>
+                <button class="btn btn-sm btn-outline-secondary ml-3">logout</button>
               </div>
             </div>
           </div>
+
+          <style>
+            .responsive-title {
+              font-size: 1.5rem;
+              /* Default size */
+            }
+
+            .responsive-text {
+              font-size: 0.9rem;
+              /* Default size */
+            }
+
+            @media (max-width: 768px) {
+              .responsive-title {
+                font-size: 1.2rem;
+                /* Adjusted size for smaller screens */
+              }
+
+              .responsive-text {
+                font-size: 0.8rem;
+                /* Adjusted size for smaller screens */
+              }
+            }
+
+            @media (max-width: 576px) {
+              .responsive-title {
+                font-size: 1rem;
+                /* Further adjusted size for very small screens */
+              }
+
+              .responsive-text {
+                font-size: 0.7rem;
+                /* Further adjusted size for very small screens */
+              }
+            }
+          </style>
           <div class="card mb-4">
             <div class="card-body">
               <h5 class="card-title">Activity</h5>
@@ -175,4 +204,5 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   </body>
+
 </html>
