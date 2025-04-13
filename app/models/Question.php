@@ -2,10 +2,9 @@
 require_once "Database.php";
 class Question {
 // Function to submit a question
-public static function submitQuestion($description, $ans1, $ans2, $ans3, $ans4, $correct_answer, $category, $image_tmp = null, $fileExt = null, $creator) {
+public static function submitQuestion($description, $ans1, $ans2, $ans3, $ans4, $correct_answer, $category, $image_tmp = null, $fileExt = null, $creator,$existingImagePath = null) {
     $conn = Database::connect();
 
-    // Sanitize input data
     $description = $conn->real_escape_string($description);
     $ans1 = $conn->real_escape_string($ans1);
     $ans2 = $conn->real_escape_string($ans2);
@@ -17,7 +16,6 @@ public static function submitQuestion($description, $ans1, $ans2, $ans3, $ans4, 
 
     $conn->begin_transaction();
 
-    // Use prepared statement for insertion
     $query = "INSERT INTO question (description, ans1, ans2, ans3, ans4, correct_answer, cate, creator)
               VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     
@@ -34,16 +32,17 @@ public static function submitQuestion($description, $ans1, $ans2, $ans3, $ans4, 
 
     $questionId = $conn->insert_id;
 
-    // Step 2: Handle image upload if provided
+
     if ($image_tmp && $fileExt) {
         $fileExt = strtolower($fileExt);
         $uploadPath = "images/questions/" . $questionId . "." . $fileExt;
-
         $safePath = $conn->real_escape_string($uploadPath);
+    
+        // Save new image path
         $updateQuery = "UPDATE question SET image_path = ? WHERE question_id = ?";
         $updateStmt = $conn->prepare($updateQuery);
         $updateStmt->bind_param("si", $safePath, $questionId);
-
+    
         if (!$updateStmt->execute()) {
             $conn->rollback();
             return [
@@ -51,7 +50,7 @@ public static function submitQuestion($description, $ans1, $ans2, $ans3, $ans4, 
                 "message" => "Question created but error saving image path: " . $updateStmt->error
             ];
         }
-
+    
         if (!move_uploaded_file($image_tmp, $uploadPath)) {
             $conn->rollback();
             return [
@@ -59,16 +58,29 @@ public static function submitQuestion($description, $ans1, $ans2, $ans3, $ans4, 
                 "message" => "Question created but could not save image. Changes have been discarded."
             ];
         }
+    
+    } elseif ($existingImagePath) {
+        $safePath = $conn->real_escape_string($existingImagePath);
+        $updateQuery = "UPDATE question SET image_path = ? WHERE question_id = ?";
+        $updateStmt = $conn->prepare($updateQuery);
+        $updateStmt->bind_param("si", $safePath, $questionId);
+        $updateStmt->execute(); 
     }
+    
 
     $conn->commit();
+
+    $deleteQuery = "DELETE FROM admin_cur_question WHERE creator = ?";
+    $deleteStmt = $conn->prepare($deleteQuery);
+    $deleteStmt->bind_param("i", $creator);
+    $deleteStmt->execute();
+
     return [
         "success" => true,
         "message" => "Question added successfully!",
         "question_id" => $questionId
     ];
 }
-
 // Function to cache admin's current question
 public static function cacheAdminCurrentQuestion($description, $ans1, $ans2, $ans3, $ans4, $correct_answer, $category, $image_tmp = null, $fileExt = null, $creator) {
     $conn = Database::connect();

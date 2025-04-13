@@ -55,19 +55,22 @@ CREATE TABLE admin_cur_test (
 
 DROP TABLE IF EXISTS question;
 CREATE TABLE question (
-	question_id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    question_id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     description TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
     cate VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
     ans1 TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
     ans2 TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
     ans3 TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
     ans4 TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-	correct_answer ENUM('1','2','3','4') NOT NULL,
+    correct_answer ENUM('1','2','3','4') NOT NULL,
     image_path VARCHAR(255),
     creator INT UNSIGNED,
+    created_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+    status enum('active','deleted') DEFAULT 'active',
     FOREIGN KEY(creator) REFERENCES admin(user_id),
-	FOREIGN KEY(cate) REFERENCES category(cate)
+    FOREIGN KEY(cate) REFERENCES category(cate)
 );
+
 
 DROP TABLE IF EXISTS admin_cur_test_have_questions;
 CREATE TABLE admin_cur_test_have_questions (
@@ -140,4 +143,4 @@ CREATE TABLE chosen_answer(
     FOREIGN KEY(attempt_id) REFERENCES test_attempt(attempt_id)
 );
 
-SELECT * FROM question;
+SELECT * FROM admin_cur_question;

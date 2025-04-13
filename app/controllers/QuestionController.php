@@ -21,7 +21,8 @@ class QuestionController {
         $correct = $data['correctAnswer'];
         $category = $data['category'];
         $creator = $_SESSION['user_id'];
-    
+        $existingImagePath = $data['existingImagePath'] ?? null;
+
         $image_tmp = null;
         $fileExt = null;
     
@@ -32,7 +33,7 @@ class QuestionController {
     
         $result = Question::submitQuestion(
             $description, $ans1, $ans2, $ans3, $ans4,
-            $correct, $category, $image_tmp, $fileExt, $creator
+            $correct, $category, $image_tmp, $fileExt, $creator, $existingImagePath
         );
     
         echo json_encode($result);

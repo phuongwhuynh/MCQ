@@ -53,6 +53,7 @@
                 <small id="image-filename" class="text-muted d-block mt-1"></small>
               </div>
             </div>
+            <input type="hidden" name="existingImagePath" id="existingImagePath" />
 
             <div class="mb-3 d-flex justify-content-center">
               <img
@@ -187,14 +188,23 @@ document.addEventListener('DOMContentLoaded', async function () {
 
       // Check and display image preview if the image path is provided
       const imagePreview = document.getElementById("image-preview");
-      if (imagePreview) {
-        if (data.image_path) {
-          imagePreview.src = "public/" + data.image_path;
-          imagePreview.classList.remove("d-none");
-        } else {
-          imagePreview.classList.add("d-none"); // Hide the image preview if no path is available
-        }
+      // if (imagePreview) {
+      //   if (data.image_path) {
+      //     imagePreview.src = "public/" + data.image_path;
+      //     imagePreview.classList.remove("d-none");
+      //   } else {
+      //     imagePreview.classList.add("d-none"); // Hide the image preview if no path is available
+      //   }
+      // }
+      if (data.image_path) {
+        imagePreview.src = "public/" + data.image_path;
+        imagePreview.classList.remove("d-none");
+        document.getElementById("existingImagePath").value = data.image_path; // set hidden field
+      } else {
+        imagePreview.classList.add("d-none");
+        document.getElementById("existingImagePath").value = "";
       }
+
     } else {
       console.error("No cached data found or an error occurred.");
     }
@@ -246,7 +256,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         return;
       }
     }
-
+    console.log("existingImagePath:", formData.get("existingImagePath"));
     try {
       const response = await fetch("index.php", {
         method: "POST",

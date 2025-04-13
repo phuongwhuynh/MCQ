@@ -1,574 +1,372 @@
 <div class="container my-4">
-    <header class="d-flex justify-content-between align-items-center py-3">
-    <h1 class="h3">Quiz Management</h1>
-    <nav>
-        <ul class="nav">
-        <li class="nav-item">
-            <a class="nav-link text-primary" href="#"> Home </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-primary" href="#"> Questions </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-primary" href="#"> Create Quiz </a>
-        </li>
-        </ul>
-    </nav>
-    </header>
-    <main>
+  <!-- <h1 class="h3">Quiz Management</h1> -->
+  <div>
     <section class="mb-5">
-        <h2 class="h4 mb-3">Available Questions</h2>
-        <div class="card shadow-sm">
+      <h2 class="h4 mb-3">Available Questions</h2>
+      <div class="card shadow-sm">
         <div class="card-body">
-            <div class="d-flex justify-content-between mb-3">
-            <input
-                class="form-control w-50"
-                id="search-input"
-                placeholder="Search questions..."
-                type="text"
-            />
-            <div>
-                <button class="btn btn-primary me-2" id="sort-id">
-                Sort by ID
-                </button>
-                <button class="btn btn-primary" id="sort-description">
-                Sort by Description
-                </button>
+          <div class="row align-items-end mb-3">
+            <!-- Search bar -->
+            <div class="col-md-4 mb-2">
+              <label for="search-input" class="form-label">Search</label>
+              <input class="form-control" id="search-input" placeholder="Search questions..." type="text" />
             </div>
+
+            <!-- Category Filter -->
+            <div class="col-md-4 mb-2">
+              <label for="category-filter" class="form-label">Filter by Category</label>
+              <select class="form-select" id="category-filter" multiple="multiple">
+                <option value="Math">Math</option>
+                <option value="Literature">Literature</option>
+                <option value="Science">Science</option>
+                <option value="History">History</option>
+                <option value="Geography">Geography</option>
+              </select>
             </div>
-            <div class="table-responsive">
+
+            <!-- Sorting -->
+            <div class="col-md-4 mb-2">
+              <label for="sort-dropdown" class="form-label">Sort By</label>
+              <select class="form-select" id="sort-dropdown">
+                <option value="description_asc">Description (A-Z)</option>
+                <option value="description_desc">Description (Z-A)</option>
+                <option value="created_time_asc">Time (Oldest)</option>
+                <option value="created_time_desc">Time (Newest)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Table -->
+          <div class="table-responsive">
             <table class="table table-striped" id="questions-table">
-                <thead>
+              <thead>
                 <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Description</th>
-                    <th scope="col">Answer 1</th>
-                    <th scope="col">Answer 2</th>
-                    <th scope="col">Answer 3</th>
-                    <th scope="col">Answer 4</th>
-                    <th scope="col">Correct Answer</th>
-                    <th scope="col">Image</th>
-                    <th scope="col">Select</th>
+                  <th scope="col">ID</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Category</th>
+                  <th scope="col">Image</th>
                 </tr>
-                </thead>
-                <tbody>
-                <!-- -------------------------------------Demo data----------------------------------------------- -->
-                <tr>
-                    <td>1</td>
-                    <td
-                    class="description-cell"
-                    data-bs-toggle="modal"
-                    data-bs-target="#questionModal"
-                    >
-                    Even if you feel bad Even if you wish to leave and go
-                    away In and out of madness In and out of goodness You
-                    must be awake When it's freezin', when it's burnin' Hold
-                    your black car, let it go far Burns the fever burns as
-                    fire Never never surrender Max power maximum and higher
-                    Beat'em all, let's beat'em all! Max power, get it on,
-                    you go there Let's get what you belong to Max power
-                    maximum and higher Beat'em all, let's beat'em all! Max
-                    power, get it on, you go there Let's get what you belong
-                    to Always in the riot Always in the lion's cage It's
-                    what you need
-                    </td>
-                    <td class="description-cell">
-                    Beat'em all, let's beat'em all! Max power Beat'em all,
-                    let's beat'em all! Max powerBeat'em all, let's beat'em
-                    all! Max powerBeat'em all, let's beat'em all! Max power
-                    </td>
-                    <td class="description-cell">
-                    Beat'em all, let's beat'em all! Max power
-                    </td>
-                    <td class="description-cell">
-                    Beat'em all, let's beat'em all! Max power
-                    </td>
-                    <td class="description-cell">
-                    Beat'em all, let's beat'em all! Max power
-                    </td>
-                    <td>3</td>
-                    <td>
-                    <img
-                        alt="Placeholder image for question 1"
-                        class="img-responsive"
-                        style="max-height: 40px"
-                        src="https://i.pinimg.com/736x/71/40/0e/71400e3a6d4ed3f54c1c1a26feb2809a.jpg"
-                    />
-                    </td>
-                    <td class="text-center">
-                    <input class="form-check-input" type="checkbox" />
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>2</td>
-                    <td
-                    class="description-cell"
-                    data-bs-toggle="modal"
-                    data-bs-target="#questionModal"
-                    >
-                    what you need
-                    </td>
-                    <td class="description-cell">Beat'</td>
-                    <td class="description-cell">Beat'</td>
-                    <td class="description-cell">Beat'</td>
-                    <td class="description-cell">Beat'</td>
-                    <td>3</td>
-                    <td>
-                    <img
-                        alt="Placeholder image for question 1"
-                        class="img-responsive"
-                        style="max-height: 40px"
-                        src="https://i.pinimg.com/736x/71/40/0e/71400e3a6d4ed3f54c1c1a26feb2809a.jpg"
-                    />
-                    </td>
-                    <td class="text-center">
-                    <input class="form-check-input" type="checkbox" />
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>3</td>
-                    <td
-                    class="description-cell"
-                    data-bs-toggle="modal"
-                    data-bs-target="#questionModal"
-                    >
-                    what you need
-                    </td>
-                    <td class="description-cell">Beat'</td>
-                    <td class="description-cell">Beat'</td>
-                    <td class="description-cell">Beat'</td>
-                    <td class="description-cell">Beat'</td>
-                    <td>3</td>
-                    <td>
-                    <img
-                        alt="Placeholder image for question 1"
-                        class="img-responsive"
-                        style="max-height: 40px"
-                        src="https://i.pinimg.com/736x/71/40/0e/71400e3a6d4ed3f54c1c1a26feb2809a.jpg"
-                    />
-                    </td>
-                    <td class="text-center">
-                    <input class="form-check-input" type="checkbox" />
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>4</td>
-                    <td
-                    class="description-cell"
-                    data-bs-toggle="modal"
-                    data-bs-target="#questionModal"
-                    >
-                    what you need
-                    </td>
-                    <td class="description-cell">Beat'</td>
-                    <td class="description-cell">Beat'</td>
-                    <td class="description-cell">Beat'</td>
-                    <td class="description-cell">Beat'</td>
-                    <td>5</td>
-                    <td>
-                    <img
-                        alt="Placeholder image for question 1"
-                        class="img-responsive"
-                        style="max-height: 40px"
-                        src="https://i.pinimg.com/736x/71/40/0e/71400e3a6d4ed3f54c1c1a26feb2809a.jpg"
-                    />
-                    </td>
-                    <td class="text-center">
-                    <input class="form-check-input" type="checkbox" />
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>6</td>
-                    <td
-                    class="description-cell"
-                    data-bs-toggle="modal"
-                    data-bs-target="#questionModal"
-                    >
-                    what you need
-                    </td>
-                    <td class="description-cell">Beat'</td>
-                    <td class="description-cell">Beat'</td>
-                    <td class="description-cell">Beat'</td>
-                    <td class="description-cell">Beat'</td>
-                    <td>3</td>
-                    <td>
-                    <img
-                        alt="Placeholder image for question 1"
-                        class="img-responsive"
-                        style="max-height: 40px"
-                        src="https://i.pinimg.com/736x/71/40/0e/71400e3a6d4ed3f54c1c1a26feb2809a.jpg"
-                    />
-                    </td>
-                    <td class="text-center">
-                    <input class="form-check-input" type="checkbox" />
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>7</td>
-                    <td
-                    class="description-cell"
-                    data-bs-toggle="modal"
-                    data-bs-target="#questionModal"
-                    >
-                    what you need
-                    </td>
-                    <td class="description-cell">Beat'</td>
-                    <td class="description-cell">Beat'</td>
-                    <td class="description-cell">Beat'</td>
-                    <td class="description-cell">Beat'</td>
-                    <td>3</td>
-                    <td>
-                    <img
-                        alt="Placeholder image for question 1"
-                        class="img-responsive"
-                        style="max-height: 40px"
-                        src="https://i.pinimg.com/736x/71/40/0e/71400e3a6d4ed3f54c1c1a26feb2809a.jpg"
-                    />
-                    </td>
-                    <td class="text-center">
-                    <input class="form-check-input" type="checkbox" />
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>8</td>
-                    <td
-                    class="description-cell"
-                    data-bs-toggle="modal"
-                    data-bs-target="#questionModal"
-                    >
-                    what you need
-                    </td>
-                    <td class="description-cell">Beat'</td>
-                    <td class="description-cell">Beat'</td>
-                    <td class="description-cell">Beat'</td>
-                    <td class="description-cell">Beat'</td>
-                    <td>3</td>
-                    <td>
-                    <img
-                        alt="Placeholder image for question 1"
-                        class="img-responsive"
-                        style="max-height: 40px"
-                        src="https://i.pinimg.com/736x/71/40/0e/71400e3a6d4ed3f54c1c1a26feb2809a.jpg"
-                    />
-                    </td>
-                    <td class="text-center">
-                    <input class="form-check-input" type="checkbox" />
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>9</td>
-                    <td
-                    class="description-cell"
-                    data-bs-toggle="modal"
-                    data-bs-target="#questionModal"
-                    >
-                    what you need
-                    </td>
-                    <td class="description-cell">Beat'</td>
-                    <td class="description-cell">Beat'</td>
-                    <td class="description-cell">Beat'</td>
-                    <td class="description-cell">Beat'</td>
-                    <td>10</td>
-                    <td>
-                    <img
-                        alt="Placeholder image for question 1"
-                        class="img-responsive"
-                        style="max-height: 40px"
-                        src="https://i.pinimg.com/736x/71/40/0e/71400e3a6d4ed3f54c1c1a26feb2809a.jpg"
-                    />
-                    </td>
-                    <td class="text-center">
-                    <input class="form-check-input" type="checkbox" />
-                    </td>
-                </tr>
-
-                <!-- -------------------------------------Demo----------------------------------------- -->
-                </tbody>
+              </thead>
+              <tbody id="questions-list">
+                <!-- Dynamic rows inserted here by JavaScript -->
+            </tbody>
             </table>
-            </div>
-            <!-- Pagination Controls -->
-            <nav aria-label="Questions pagination">
-            <ul class="pagination" id="pagination-controls"></ul>
-            </nav>
-        </div>
-        </div>
-    </section>
-    <section>
-        <h2 class="h4 mb-3">Create New Quiz</h2>
-        <div class="card shadow-sm">
-        <div class="card-body">
-            <form>
-            <div class="mb-3">
-                <label class="form-label" for="quiz-title">Quiz Title</label>
-                <input class="form-control" id="quiz-title" type="text" />
-            </div>
-            <div class="mb-3">
-                <label class="form-label" for="quiz-time"
-                >Total Time (minutes)</label
-                >
-                <input class="form-control" id="quiz-time" type="number" />
-            </div>
-            <div class="mb-3">
-                <label class="form-label" for="quiz-questions"
-                >Selected Questions</label
-                >
-                <ul class="list-group" id="selected-questions"></ul>
-            </div>
-            <button class="btn btn-primary" type="submit">
-                Create Quiz
-            </button>
-            </form>
-        </div>
-        </div>
-    </section>
-    </main>
+          </div>
 
-    <!-- Modal for Question Details -->
-    <div
-    class="modal fade"
-    id="questionModal"
-    tabindex="-1"
-    aria-labelledby="questionModalLabel"
-    aria-hidden="true"
-    >
+          <!-- Pagination Controls -->
+          <nav aria-label="Questions pagination">
+            <ul class="pagination" id="pagination-controls"></ul>
+          </nav>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quiz Builder -->
+    <section>
+      <h2 class="h4 mb-3">Create New Quiz</h2>
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <form>
+            <div class="mb-3">
+              <label class="form-label" for="quiz-title">Quiz Title</label>
+              <input class="form-control" id="quiz-title" type="text" required />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label" for="quiz-time">Total Time (minutes)</label>
+              <input class="form-control" id="quiz-time" type="number" required min="1" />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label" for="quiz-questions">Selected Questions</label>
+              <ul class="list-group" id="selected-questions">
+                <!-- Dynamically added questions appear here -->
+              </ul>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label" for="quiz-image">Quiz Cover Image</label>
+              <div class="custom-file-input-wrapper">
+                <label for="quiz-image" class="btn btn-outline-primary">Upload Image</label>
+                <input
+                  class="form-control d-none"
+                  type="file"
+                  id="quiz-image"
+                  name="quiz_image"
+                  accept="image/*"
+                  onchange="previewQuizImage(event)"
+                />
+                <small id="quiz-image-filename" class="text-muted d-block mt-1"></small>
+              </div>
+              <img id="quiz-image-preview" src="#" class="img-thumbnail mt-3 d-none" style="max-height: 200px;" />
+            </div>
+
+            <button class="btn btn-primary" type="submit">Create Quiz</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Modal for Question Details -->
+  <div class="modal fade" id="questionModal" tabindex="-1" aria-labelledby="questionModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content">
+      <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title" id="questionModalLabel">
-            Question Details
-            </h5>
-            <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-            ></button>
+          <h5 class="modal-title" id="questionModalLabel">Question Details</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-            <p><strong>ID:</strong> <span id="modal-id"></span></p>
-            <p>
-            <strong>Description:</strong>
-            <span id="modal-description"></span>
-            </p>
-            <p><strong>Answer 1:</strong> <span id="modal-answer1"></span></p>
-            <p><strong>Answer 2:</strong> <span id="modal-answer2"></span></p>
-            <p><strong>Answer 3:</strong> <span id="modal-answer3"></span></p>
-            <p><strong>Answer 4:</strong> <span id="modal-answer4"></span></p>
-            <p>
-            <strong>Correct Answer:</strong>
-            <span id="modal-correct"></span>
-            </p>
-            <div id="modal-image"></div>
+          <p><strong>ID:</strong> <span id="modal-id"></span></p>
+          <p><strong>Description:</strong> <span id="modal-description"></span></p>
+          <p><strong>Category:</strong> <span id="modal-category"></span></p>
+          <div id="modal-image"></div>
         </div>
         <div class="modal-footer">
-            <button
-            type="button"
-            class="btn btn-secondary"
-            data-bs-dismiss="modal"
-            >
-            Close
-            </button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         </div>
-        </div>
+      </div>
     </div>
-    </div>
+  </div>
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", () => {
-    const selectedQuestionsList =
-        document.getElementById("selected-questions");
-    const searchInput = document.getElementById("search-input");
-    const sortIdButton = document.getElementById("sort-id");
-    const sortDescriptionButton =
-        document.getElementById("sort-description");
-    const questionsTable = document
-        .getElementById("questions-table")
-        .getElementsByTagName("tbody")[0];
-    const paginationControls = document.getElementById(
-        "pagination-controls"
-    );
-    let allRows = Array.from(questionsTable.getElementsByTagName("tr"));
-    const rowsPerPage = 5;
-    let currentPage = 1;
-    let filteredRows = allRows;
+document.addEventListener('DOMContentLoaded', function () {
+    let debounceTimeout;
 
-    // Checkbox handling
-    function attachCheckboxListeners() {
-        const checkboxes = questionsTable.querySelectorAll(
-        'input[type="checkbox"]'
-        );
-        checkboxes.forEach((checkbox) => {
-        // Remove existing listeners to prevent duplicates
-        const newCheckbox = checkbox.cloneNode(true);
-        checkbox.replaceWith(newCheckbox);
-        newCheckbox.addEventListener("change", (event) => {
-            const row = event.target.closest("tr");
-            const questionId = row.cells[0].innerText;
-            const questionDescription = row.cells[1].innerText;
-
-            if (event.target.checked) {
-            // Check if the question is already selected to prevent duplicates
-            const existingItem = selectedQuestionsList.querySelector(
-                `li[data-question-id="${questionId}"]`
-            );
-            if (!existingItem) {
-                const listItem = document.createElement("li");
-                listItem.className = "list-group-item";
-                listItem.textContent = `ID: ${questionId} - ${questionDescription.substring(
-                0,
-                50
-                )}${questionDescription.length > 50 ? "..." : ""}`;
-                listItem.dataset.questionId = questionId;
-                selectedQuestionsList.appendChild(listItem);
-            }
-            } else {
-            const listItem = selectedQuestionsList.querySelector(
-                `li[data-question-id="${questionId}"]`
-            );
-            if (listItem) {
-                selectedQuestionsList.removeChild(listItem);
-            }
-            }
-        });
-        });
+    // Debounced fetchQuestions function
+    function debouncedFetchQuestions() {
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(fetchQuestions, 300); // Delay of 300ms
     }
 
-    // Search functionality
-    searchInput.addEventListener("input", () => {
-        const filter = searchInput.value.toLowerCase();
-        filteredRows = allRows.filter((row) => {
-        const description = row.cells[1].innerText.toLowerCase();
-        return description.includes(filter);
-        });
-        currentPage = 1;
-        renderTable();
-        renderPagination();
+    // Add event listeners
+    document.getElementById('search-input').addEventListener('input', function () {
+        debouncedFetchQuestions();
     });
 
-    // Sort functionality
-    sortIdButton.addEventListener("click", () => sortTable(0));
-    sortDescriptionButton.addEventListener("click", () => sortTable(1));
-
-    function sortTable(columnIndex) {
-        filteredRows.sort((a, b) => {
-        const aText = a.cells[columnIndex].innerText;
-        const bText = b.cells[columnIndex].innerText;
-        return aText.localeCompare(bText, undefined, { numeric: true });
-        });
-        currentPage = 1;
-        renderTable();
-        renderPagination();
-    }
-
-    // Modal population
-    function attachModalListeners() {
-        const descriptionCells =
-        document.querySelectorAll(".description-cell");
-        descriptionCells.forEach((cell) => {
-        // Remove existing listeners to prevent duplicates
-        const newCell = cell.cloneNode(true);
-        cell.replaceWith(newCell);
-        newCell.addEventListener("click", () => {
-            const row = newCell.closest("tr");
-            document.getElementById("modal-id").textContent =
-            row.cells[0].innerText;
-            document.getElementById("modal-description").textContent =
-            row.cells[1].innerText;
-            document.getElementById("modal-answer1").textContent =
-            row.cells[2].innerText;
-            document.getElementById("modal-answer2").textContent =
-            row.cells[3].innerText;
-            document.getElementById("modal-answer3").textContent =
-            row.cells[4].innerText;
-            document.getElementById("modal-answer4").textContent =
-            row.cells[5].innerText;
-            document.getElementById("modal-correct").textContent =
-            row.cells[6].innerText;
-
-            const imgSrc = row.cells[7].querySelector("img")?.src || "";
-            const modalImage = document.getElementById("modal-image");
-            modalImage.innerHTML = imgSrc
-            ? `<img src="${imgSrc}" alt="Question image" class="img-fluid" style="max-height: 200px;">`
-            : "No image available";
-        });
-        });
-    }
-
-    // Pagination functionality
-    function renderTable() {
-        const start = (currentPage - 1) * rowsPerPage;
-        const end = start + rowsPerPage;
-        questionsTable.innerHTML = "";
-        filteredRows
-        .slice(start, end)
-        .forEach((row) => questionsTable.appendChild(row));
-        attachModalListeners();
-        attachCheckboxListeners();
-    }
-
-    function renderPagination() {
-        const pageCount = Math.ceil(filteredRows.length / rowsPerPage);
-        paginationControls.innerHTML = "";
-
-        // Previous button
-        const prevItem = document.createElement("li");
-        prevItem.className = `page-item ${
-        currentPage === 1 ? "disabled" : ""
-        }`;
-        prevItem.innerHTML = `<a class="page-link" href="#">Previous</a>`;
-        prevItem.addEventListener("click", (e) => {
-        e.preventDefault();
-        if (currentPage > 1) {
-            currentPage--;
-            renderTable();
-            renderPagination();
-        }
-        });
-        paginationControls.appendChild(prevItem);
-
-        // Page numbers
-        for (let i = 1; i <= pageCount; i++) {
-        const pageItem = document.createElement("li");
-        pageItem.className = `page-item ${
-            i === currentPage ? "active" : ""
-        }`;
-        pageItem.innerHTML = `<a class="page-link" href="#">${i}</a>`;
-        pageItem.addEventListener("click", (e) => {
-            e.preventDefault();
-            currentPage = i;
-            renderTable();
-            renderPagination();
-        });
-        paginationControls.appendChild(pageItem);
-        }
-
-        // Next button
-        const nextItem = document.createElement("li");
-        nextItem.className = `page-item ${
-        currentPage === pageCount ? "disabled" : ""
-        }`;
-        nextItem.innerHTML = `<a class="page-link" href="#">Next</a>`;
-        nextItem.addEventListener("click", (e) => {
-        e.preventDefault();
-        if (currentPage < pageCount) {
-            currentPage++;
-            renderTable();
-            renderPagination();
-        }
-        });
-        paginationControls.appendChild(nextItem);
-    }
-
-    // Initial render
-    renderTable();
-    renderPagination();
+    $('#category-filter').select2({
+        placeholder: "Select categories",
+        allowClear: true,
+        width: '100%' 
+    }).on('change', function () {
+        fetchQuestions();  
     });
+
+    document.getElementById('sort-dropdown').addEventListener('change', function () {
+        fetchQuestions();
+    });
+
+    // Call fetchQuestions initially to load questions
+    fetchQuestions();
+});
+
+
+function fetchQuestions(page = 1) {
+    currentQuestionPage = page;
+    const questionSort = document.getElementById('sort-dropdown').value;
+
+    const selectedCategories = $('#category-filter').val() || [];
+    const questionSearch = document.getElementById('search-input').value;
+
+    const queryParams = new URLSearchParams({
+        pageNum: page,
+        sort: questionSort,
+        categories: selectedCategories.join(','),
+        search: questionSearch
+    });
+    fetch(`index.php?controller=test&ajax=1&action=handlePagination&${queryParams.toString()}`, {
+        method: 'GET'
+    })
+    .then(response => response.json())
+    .then(data => {
+
+        const { questions, totalPages } = data;
+
+        const container = document.getElementById('questions-list');
+
+        container.innerHTML = '';
+        console.log("wtf")
+
+        if (questions.length === 0) {
+            container.innerHTML = "<p>No questions found.</p>";
+            renderQuestionPagination(totalPages);
+            return;
+        }
+
+        questions.forEach(question => {
+            const modalId = `question-modal-${question.question_id}`;
+
+            // Create the table row element
+            const row = document.createElement('tr');
+
+            // Set the inner HTML for the table row
+            row.innerHTML = `
+                <td>${question.question_id}</td>
+                <td class="description-cell" data-bs-toggle="modal" data-bs-target="#${modalId}">
+                    ${question.description}
+                </td>
+                <td>${question.cate}</td>
+                <td>
+                    ${question.image_path ? `
+                        <img src="public/${question.image_path}" class="img-responsive" style="max-height: 40px" alt="Question Image"/>
+                    ` : ''}
+                </td>
+                <td class="text-center">
+                    <input class="form-check-input" type="checkbox" data-question-id="${question.question_id}" ${question.is_selected ? 'checked' : ''} />
+                </td>
+            `;
+
+            // Add event listener for checkbox logic
+            const checkbox = row.querySelector('.form-check-input');
+            checkbox.addEventListener('change', (event) => {
+                const questionId = event.target.getAttribute('data-question-id');
+                const isSelected = event.target.checked;
+
+                // Logic to handle selection, such as storing the selected question ID
+                console.log(`Question ${questionId} selected: ${isSelected}`);
+
+                // You can add any custom logic here, like saving the selected question in an array or sending it to the server.
+            });
+
+            // Find the table body to insert the row into
+            const questionsList = document.getElementById('questions-list');
+            questionsList.appendChild(row);
+
+            // Create the modal
+            const modal = document.createElement('div');
+            modal.classList.add('modal', 'fade');
+            modal.id = modalId;
+            modal.tabIndex = -1;
+            modal.setAttribute('aria-labelledby', `${modalId}-label`);
+            modal.setAttribute('aria-hidden', 'true');
+            modal.innerHTML = `
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="${modalId}-label">Question Details</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p><strong>Description:</strong> ${question.description}</p>
+                            <p><strong>Category:</strong> ${question.cate}</p>
+                            <p><strong>Answer 1:</strong> ${question.ans1}</p>
+                            <p><strong>Answer 2:</strong> ${question.ans2}</p>
+                            <p><strong>Answer 3:</strong> ${question.ans3}</p>
+                            <p><strong>Answer 4:</strong> ${question.ans4}</p>
+                            <p><strong>Correct Answer:</strong> ${question.correct_answer}</p>
+                            ${question.image_path ? `<img src="public/${question.image_path}" class="img-fluid mt-2" alt="Question Image">` : ''}
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Append the modal to the body (outside the table)
+            document.body.appendChild(modal);
+        });
+
+
+        renderQuestionPagination(totalPages);
+    })
+    .catch(error => {
+        console.error("Error loading questions:", error);
+    });
+}
+
+function renderQuestionPagination(totalPages) {
+  const paginationContainer = document.getElementById('pagination-controls');
+  paginationContainer.innerHTML = '';
+
+  const createPageItem = (page, isActive = false) => {
+    const li = document.createElement('li');
+    li.className = `page-item ${isActive ? 'active' : ''}`;
+    li.innerHTML = `<a class="page-link" href="#">${page}</a>`;
+    li.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (!isActive) fetchQuestions(page);
+    });
+    return li;
+  };
+
+  if (totalPages <= 1) return;
+
+  for (let i = 1; i <= totalPages; i++) {
+    paginationContainer.appendChild(createPageItem(i, i === currentQuestionPage));
+  }
+}
+
+//   // Handle individual checkbox change
+//   document.querySelectorAll('.question-checkbox').forEach((checkbox) => {
+//     checkbox.addEventListener('change', function () {
+//       toggleSelectedQuestion(this);
+//     });
+//   });
+
+//   function toggleSelectedQuestion(checkbox) {
+//     const questionRow = checkbox.closest('tr');
+//     const questionId = questionRow.getAttribute('data-question-id');
+//     const description = questionRow.querySelector('.description-cell').innerText;
+
+//     const selectedQuestionsList = document.getElementById('selected-questions');
+
+//     if (checkbox.checked) {
+//       // Add the question to selected questions
+//       const li = document.createElement('li');
+//       li.classList.add('list-group-item');
+//       li.innerHTML = `
+//         Question ${questionId}: ${description}
+//         <button class="btn btn-danger btn-sm float-end delete-selected-btn" data-question-id="${questionId}">Delete</button>
+//       `;
+//       selectedQuestionsList.appendChild(li);
+
+//       // Add event listener for delete button
+//       li.querySelector('.delete-selected-btn').addEventListener('click', function () {
+//         removeSelectedQuestion(this);
+//       });
+//     } else {
+//       // Remove the question from selected questions
+//       const li = document.querySelector(`#selected-questions li button[data-question-id="${questionId}"]`).closest('li');
+//       selectedQuestionsList.removeChild(li);
+//     }
+//   }
+
+//   // Remove selected question
+//   function removeSelectedQuestion(button) {
+//     const questionId = button.getAttribute('data-question-id');
+//     const questionRow = document.querySelector(`tr[data-question-id="${questionId}"]`);
+//     const checkbox = questionRow.querySelector('.question-checkbox');
+//     checkbox.checked = false;
+//     const li = button.closest('li');
+//     li.remove();
+//   }
+//   function previewQuizImage(event) {
+//     const file = event.target.files[0];
+//     const preview = document.getElementById('quiz-image-preview');
+//     const filenameLabel = document.getElementById('quiz-image-filename');
+
+//     // If a file is selected
+//     if (file) {
+//       // Display the filename
+//       filenameLabel.textContent = file.name;
+
+//       // Create a URL for the image
+//       const reader = new FileReader();
+//       reader.onload = function (e) {
+//         // Set the preview image source
+//         preview.src = e.target.result;
+//         preview.classList.remove('d-none');  // Make the image visible
+//       };
+//       reader.readAsDataURL(file);
+//     } else {
+//       // Hide the preview if no file is selected
+//       preview.classList.add('d-none');
+//       filenameLabel.textContent = '';
+//     }
+//   }
+
+
+
 </script>
