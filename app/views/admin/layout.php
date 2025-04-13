@@ -4,7 +4,7 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>Dashboard</title>
     <link
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
     <link
@@ -36,7 +36,8 @@
               <p class="text-muted">Teacher</p>
               <img
                 alt="Profile picture of Nguyen Van B"
-                class="rounded-circle mb-2"
+                class="rounded-circle img-responsive"
+                style="max-height: 300px"
                 src="https://i.pinimg.com/736x/c6/70/2b/c6702b4c64ff1910d3fc220248cc1907.jpg"
               />
               <h5>Nguyen Van B</h5>
@@ -69,18 +70,19 @@
             class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
           >
             <h1 class="h2">Welcome Mr. B</h1>
-            <div class="btn-toolbar">
+            <div class="btn-toolbar mb-2 mb-md-0">
               <div class="btn-group">
-                <i class="fas fa-envelope text-primary pt-2 pr-1"> </i>
-                <div class="d-flex align-items-center ml-2">
+                <i class="fas fa-envelope text-primary pt-4"> </i>
+                <div class="d-flex align-items-center">
                   <img
                     alt="Profile picture of Nguyen Van B"
-                    class="rounded-circle"
-                    src="https://placehold.co/30x30"
+                    class="rounded-circle img-responsive mx-2"
+                    style="max-height: 50px"
+                    src="https://i.pinimg.com/736x/c6/70/2b/c6702b4c64ff1910d3fc220248cc1907.jpg"
                   />
-                  <span class="ml-2"> Nguyen Van B </span>
+                  <span class="p-1"> Nguyen Van B </span>
                 </div>
-                <button class="btn btn-sm btn-outline-secondary ml-3">
+                <button class="btn btn-sm btn-outline-secondary pl-3">
                   logout
                 </button>
               </div>
