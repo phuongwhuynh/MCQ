@@ -41,7 +41,6 @@
             <table class="table table-striped" id="questions-table">
               <thead>
                 <tr>
-                  <th scope="col">ID</th>
                   <th scope="col">Description</th>
                   <th scope="col">Category</th>
                   <th scope="col">Image</th>
@@ -76,6 +75,17 @@
               <label class="form-label" for="quiz-time">Total Time (minutes)</label>
               <input class="form-control" id="quiz-time" type="number" required min="1" />
             </div>
+            <div class="mb-3">
+              <label class="form-label" for="quiz-category">Category</label>
+              <select class="form-select" id="quiz-category" required>
+                <option value="" disabled selected>Select a Category</option>
+                <option value="Math">Math</option>
+                <option value="Literature">Literature</option>
+                <option value="Science">Science</option>
+                <option value="History">History</option>
+                <option value="Geography">Geography</option>
+              </select>
+            </div>
 
             <div class="mb-3">
               <label class="form-label" for="quiz-questions">Selected Questions</label>
@@ -92,7 +102,7 @@
                   class="form-control d-none"
                   type="file"
                   id="quiz-image"
-                  name="quiz_image"
+                  name="image"
                   accept="image/*"
                   onchange="previewQuizImage(event)"
                 />
@@ -131,6 +141,32 @@
 </div>
 
 <script>
+const selectedQuestionMap = {}; 
+function previewQuizImage(event) {
+    const file = event.target.files[0];  // Get the first selected file
+    const previewImage = document.getElementById('quiz-image-preview');
+    const fileNameLabel = document.getElementById('quiz-image-filename');
+    
+    if (file) {
+        const reader = new FileReader();
+        
+        // When file is read, update the preview image
+        reader.onload = function(e) {
+            // Display the preview image
+            previewImage.src = e.target.result;
+            previewImage.classList.remove('d-none');  // Show the image preview
+            fileNameLabel.textContent = file.name;  // Update the file name label
+        }
+        
+        // Read the file as a data URL to preview it
+        reader.readAsDataURL(file);
+    } else {
+        // Reset preview if no file is selected
+        previewImage.classList.add('d-none');
+        fileNameLabel.textContent = '';
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     let debounceTimeout;
 
@@ -202,7 +238,6 @@ function fetchQuestions(page = 1) {
 
             // Set the inner HTML for the table row
             row.innerHTML = `
-                <td>${question.question_id}</td>
                 <td class="description-cell" data-bs-toggle="modal" data-bs-target="#${modalId}">
                     ${question.description}
                 </td>
@@ -220,13 +255,19 @@ function fetchQuestions(page = 1) {
             // Add event listener for checkbox logic
             const checkbox = row.querySelector('.form-check-input');
             checkbox.addEventListener('change', (event) => {
-                const questionId = event.target.getAttribute('data-question-id');
+                const questionId = question.question_id;
+                const description = question.description;
                 const isSelected = event.target.checked;
 
-                // Logic to handle selection, such as storing the selected question ID
-                console.log(`Question ${questionId} selected: ${isSelected}`);
-
-                // You can add any custom logic here, like saving the selected question in an array or sending it to the server.
+                if (isSelected) {
+                    // Cache and render in selected list
+                    selectedQuestionMap[questionId] = { questionId, description };
+                    renderSelectedQuestions();
+                } else {
+                    // Remove from cache and re-render
+                    delete selectedQuestionMap[questionId];
+                    renderSelectedQuestions();
+                }
             });
 
             // Find the table body to insert the row into
@@ -297,75 +338,109 @@ function renderQuestionPagination(totalPages) {
     paginationContainer.appendChild(createPageItem(i, i === currentQuestionPage));
   }
 }
+function renderSelectedQuestions() {
+    const selectedList = document.getElementById('selected-questions');
+    selectedList.innerHTML = '';  // Clear the existing list
 
-//   // Handle individual checkbox change
-//   document.querySelectorAll('.question-checkbox').forEach((checkbox) => {
-//     checkbox.addEventListener('change', function () {
-//       toggleSelectedQuestion(this);
-//     });
-//   });
+    let counter = 1;  // Initialize the counter to 1
 
-//   function toggleSelectedQuestion(checkbox) {
-//     const questionRow = checkbox.closest('tr');
-//     const questionId = questionRow.getAttribute('data-question-id');
-//     const description = questionRow.querySelector('.description-cell').innerText;
+    for (const id in selectedQuestionMap) {
+        const { description } = selectedQuestionMap[id];
 
-//     const selectedQuestionsList = document.getElementById('selected-questions');
+        const li = document.createElement('li');
+        li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center');
+        li.dataset.questionId = id;  // Keep the question ID for future reference
+        li.innerHTML = `
+            <span>Question ${counter}: ${description}</span>  <!-- Use counter instead of id -->
+            <button class="btn btn-sm btn-outline-danger" data-question-id="${id}">Remove</button>
+        `;
 
-//     if (checkbox.checked) {
-//       // Add the question to selected questions
-//       const li = document.createElement('li');
-//       li.classList.add('list-group-item');
-//       li.innerHTML = `
-//         Question ${questionId}: ${description}
-//         <button class="btn btn-danger btn-sm float-end delete-selected-btn" data-question-id="${questionId}">Delete</button>
-//       `;
-//       selectedQuestionsList.appendChild(li);
+        li.querySelector('button').addEventListener('click', function () {
+            const questionId = this.getAttribute('data-question-id');
+            delete selectedQuestionMap[questionId];  // Remove from the selected questions map
+            renderSelectedQuestions();  // Re-render the selected questions
 
-//       // Add event listener for delete button
-//       li.querySelector('.delete-selected-btn').addEventListener('click', function () {
-//         removeSelectedQuestion(this);
-//       });
-//     } else {
-//       // Remove the question from selected questions
-//       const li = document.querySelector(`#selected-questions li button[data-question-id="${questionId}"]`).closest('li');
-//       selectedQuestionsList.removeChild(li);
-//     }
-//   }
+            // Also uncheck the checkbox in the table
+            const checkbox = document.querySelector(`input[data-question-id="${questionId}"]`);
+            if (checkbox) checkbox.checked = false;
+        });
 
-//   // Remove selected question
-//   function removeSelectedQuestion(button) {
-//     const questionId = button.getAttribute('data-question-id');
-//     const questionRow = document.querySelector(`tr[data-question-id="${questionId}"]`);
-//     const checkbox = questionRow.querySelector('.question-checkbox');
-//     checkbox.checked = false;
-//     const li = button.closest('li');
-//     li.remove();
-//   }
-//   function previewQuizImage(event) {
-//     const file = event.target.files[0];
-//     const preview = document.getElementById('quiz-image-preview');
-//     const filenameLabel = document.getElementById('quiz-image-filename');
+        selectedList.appendChild(li);
+        counter++;  // Increment the counter for the next question
+    }
+}
 
-//     // If a file is selected
-//     if (file) {
-//       // Display the filename
-//       filenameLabel.textContent = file.name;
 
-//       // Create a URL for the image
-//       const reader = new FileReader();
-//       reader.onload = function (e) {
-//         // Set the preview image source
-//         preview.src = e.target.result;
-//         preview.classList.remove('d-none');  // Make the image visible
-//       };
-//       reader.readAsDataURL(file);
-//     } else {
-//       // Hide the preview if no file is selected
-//       preview.classList.add('d-none');
-//       filenameLabel.textContent = '';
-//     }
-//   }
+document.querySelector('form').addEventListener('submit', function(event) {
+  event.preventDefault(); // Prevent form from submitting the default way
+
+  // Collect form data
+  const quizTitle = document.getElementById('quiz-title').value;
+  const quizTime = document.getElementById('quiz-time').value;
+  const quizCategory = document.getElementById('quiz-category').value; // Get selected category
+  const quizImage = document.getElementById('quiz-image').files[0];
+  const selectedQuestions = Array.from(document.querySelectorAll('#selected-questions .list-group-item')).map(item => item.dataset.questionId);
+  
+  console.log(selectedQuestions);
+
+  // Validation checks
+  if (!quizTitle || !quizTime || !quizCategory || selectedQuestions.length === 0) {
+    alert('Please fill in all required fields, select a category, and select questions.');
+    return;
+  }
+
+  // Prepare form data for submission
+  const formData = new FormData();
+  formData.append('test_name', quizTitle);
+  formData.append('total_time', quizTime);
+  formData.append('category', quizCategory); // Add category to form data
+  formData.append('question_ids', JSON.stringify(selectedQuestions)); 
+  formData.append('ajax', 1);
+  formData.append('controller', 'test');
+  formData.append('action', 'submitTest');
+
+  if (quizImage) {
+    console.log("Image selected")
+    formData.append('image', quizImage); // Attach the image if selected
+  }
+  console.log(quizImage);
+
+  // Send the data to the server using Fetch API
+  fetch('index.php', {
+    method: 'POST',
+    body: formData,
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      alert('Quiz created successfully!');
+      // Optionally, clear the form or redirect
+      // clearForm();
+    } else {
+      alert('Error creating quiz: ' + data.message);
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('An error occurred while creating the quiz.');
+  });
+});
+
+
+
+function clearForm() {
+  // Clear form fields
+  document.getElementById('quiz-title').value = '';
+  document.getElementById('quiz-time').value = '';
+  
+  // Clear file input and image preview
+  document.getElementById('quiz-image').value = '';
+  document.getElementById('quiz-image-preview').classList.add('d-none');
+  document.getElementById('quiz-image-filename').textContent = '';
+
+  // Clear selected questions
+  document.getElementById('selected-questions').innerHTML = '';
+}
 
 
 

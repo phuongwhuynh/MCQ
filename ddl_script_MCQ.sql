@@ -34,22 +34,17 @@ CREATE TABLE category (
 DROP TABLE IF EXISTS test;
 CREATE TABLE test (
 	test_id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    test_name text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
     total_time INT UNSIGNED NOT NULL,
+    cate VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
     number_of_questions SMALLINT UNSIGNED,
     creator INT UNSIGNED,
-    created_time datetime,
-    status ENUM('public','private','deleted') NOT NULL,
+    created_time datetime default current_timestamp,
+    status ENUM('public','private','deleted') NOT NULL default 'private',
 	image_path VARCHAR(255),
     FOREIGN KEY (creator) REFERENCES admin(user_id) 
 );
 
-DROP TABLE IF EXISTS admin_cur_test;
-CREATE TABLE admin_cur_test (
-    creator INT UNSIGNED PRIMARY KEY,
-    total_time INT UNSIGNED,
-	image_path VARCHAR(255),
-    FOREIGN KEY(creator) REFERENCES admin(user_id)
-);
 
 
 
@@ -71,15 +66,23 @@ CREATE TABLE question (
     FOREIGN KEY(cate) REFERENCES category(cate)
 );
 
-
-DROP TABLE IF EXISTS admin_cur_test_have_questions;
-CREATE TABLE admin_cur_test_have_questions (
-    creator INT UNSIGNED,
+DROP TABLE IF EXISTS test_have_question;
+CREATE TABLE test_have_question(
+	test_id INT UNSIGNED,
     question_id INT UNSIGNED,
-    PRIMARY KEY(creator,question_id),
-    FOREIGN KEY(creator) REFERENCES admin(user_id),
-	FOREIGN KEY(question_id) REFERENCES question(question_id)
+    question_number SMALLINT UNSIGNED,
+    PRIMARY KEY(test_id,question_id),
+    FOREIGN KEY(test_id) REFERENCES test(test_id),
+    FOREIGN KEY(question_id) REFERENCES question(question_id)
 );
+-- DROP TABLE IF EXISTS admin_cur_test_have_questions;
+-- CREATE TABLE admin_cur_test_have_questions (
+--     creator INT UNSIGNED,
+--     question_id INT UNSIGNED,
+--     PRIMARY KEY(creator,question_id),
+--     FOREIGN KEY(creator) REFERENCES admin(user_id),
+-- 	FOREIGN KEY(question_id) REFERENCES question(question_id)
+-- );
 
 DROP TABLE IF EXISTS admin_cur_question;
 CREATE TABLE admin_cur_question (
@@ -96,15 +99,7 @@ CREATE TABLE admin_cur_question (
     FOREIGN KEY(creator) REFERENCES admin(user_id)
 );
 
-DROP TABLE IF EXISTS test_have_question;
-CREATE TABLE test_have_question(
-	test_id INT UNSIGNED,
-    question_id INT UNSIGNED,
-    question_number SMALLINT UNSIGNED,
-    PRIMARY KEY(test_id,question_id),
-    FOREIGN KEY(test_id) REFERENCES test(test_id),
-    FOREIGN KEY(question_id) REFERENCES question(question_id)
-);
+
 
 
 
@@ -143,4 +138,4 @@ CREATE TABLE chosen_answer(
     FOREIGN KEY(attempt_id) REFERENCES test_attempt(attempt_id)
 );
 
-SELECT * FROM admin_cur_question;
+SELECT * from test a JOIN test_have_question b where a.test_id=b.test_id;
