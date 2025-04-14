@@ -26,7 +26,7 @@ class UserController {
         echo json_encode(["success" => true]); 
     }
     public static function registerAttempt($data) {
-        $requiredFields = ['username', 'password', 'email', 'name', 'lastName'];
+        $requiredFields = ['username', 'password', 'email', 'name', 'lastName','role'];
         foreach ($requiredFields as $field) {
             if (empty($data[$field])) {
                 echo json_encode([
@@ -41,7 +41,8 @@ class UserController {
         $password=$data["password"];
         $email=trim($data["email"]);
         $name = trim($data["name"]) . " " . trim($data["lastName"]);
-        $response=User::signUp($username,$password,$email,$name);
+        $role=$data['role'];
+        $response=User::signUp($username,$password,$email,$name,$role);
         header('Content-Type: application/json');
         echo json_encode($response);
 
