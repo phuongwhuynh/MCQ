@@ -113,9 +113,64 @@ class TestController {
         $test_id=$data['test_id'];
         $response=Test::getQuestionsOfTest($test_id);
         echo json_encode($response);
-
+    }
+    public static function getPreviewQuestions($data) {
+        $test_id=$data['test_id'];
+        $response=Test::getPreviewQuestionsOfTest($test_id);
+        echo json_encode($response);
+    }
+    public static function createAttempt($data) {
+        if ($_SESSION['user_role']!=='user'){
+            $response= ["status"=>"Unauthorized"];
+        }
+        else {
+            $test_id=$data["test_id"];
+            $user_id=$_SESSION["user_id"];
+            $attempt_id=Test::startTestAttempt($test_id, $user_id);
+            $response= ["status"=>"success", "attempt_id"=>$attempt_id];
+        }
+        echo json_encode($response);
+    }
+    public static function getAttempt($data) {
+        $attempt_id = $data['attempt_id'];
+        $response = Test::getAttempt($attempt_id);
+    
+        if ($response) {
+            echo json_encode(array_merge(["success" => true], $response));
+        } else {
+            echo json_encode(["success" => false]);
+        }
+    }
+    public static function submitAnswer($data) {
+        $attempt_id= $data['attempt_id'];
+        $chosen_answer = $data['chosen_answer'];
+        $save_result = Test::saveAnswer($attempt_id, $chosen_answer);
+        if ($save_result['status'] !== 'success') {
+            echo json_encode([
+                "success" => false,
+                "message" => $save_result['message'] ?? "Failed to save answer."
+            ]);
+            return;
+        }
+    
+        // Step 2: Move to the next question and get the updated attempt info
+        $next_question_data = Test::nextQuestion($attempt_id);
+    
+        if (!$next_question_data) {
+            echo json_encode([
+                "success" => false,
+                "message" => "Failed to fetch next question."
+            ]);
+            return;
+        }
+    
+        // Step 3: Return response with updated attempt info
+        echo json_encode(array_merge([ "success" => true], $next_question_data));
     }
     
+
+
+
 
 }
     

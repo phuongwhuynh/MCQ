@@ -1,57 +1,82 @@
 <?php
-$test_attempt_id = isset($_GET['test_attempt_id']) ? $_GET['test_attempt_id'] : 1;
+$attempt_id = isset($_GET['attempt_id']) ? $_GET['attempt_id'] : 1;
 $current_page = isset($_GET['num_page']) ? $_GET['num_page'] : 1;
-
-$test_attempts = [
-    1 => [
-        'name' => 'English Grammar Test',
-        'questions' => [
-            ['question' => 'What is the correct form of the verb?', 'choices' => ['go', 'went', 'goes', 'going'], 'correct' => 'goes', 'selected' => 'goes'],
-            ['question' => 'Choose the correct synonym for "happy"', 'choices' => ['angry', 'joyful', 'sad', 'bored'], 'correct' => 'joyful', 'selected' => 'angry'],
-            ['question' => 'Choose the correct option for the sentence structure', 'choices' => ['complex', 'simple', 'compound', 'compound-complex'], 'correct' => 'simple', 'selected' => 'complex'],
-        ],
-    ],
-    2 => [
-        'name' => 'Science Quiz',
-        'questions' => [
-            ['question' => 'What is the chemical symbol for water?', 'choices' => ['H2O', 'O2', 'CO2', 'N2'], 'correct' => 'H2O', 'selected' => 'CO2'],
-            ['question' => 'What is the speed of light?', 'choices' => ['3x10^8 m/s', '2x10^8 m/s', '4x10^8 m/s', '1x10^8 m/s'], 'correct' => '3x10^8 m/s', 'selected' => '3x10^8 m/s'],
-            ['question' => 'What is the atomic number of oxygen?', 'choices' => ['6', '8', '12', '10'], 'correct' => '8', 'selected' => '8'],
-        ],
-    ],
-];
-
-$test = $test_attempts[$test_attempt_id];
 ?>
 
 <div class="container my-5">
-  <h3 class="mb-4">Test Review: <?php echo $test['name']; ?></h3>
+  <h3 id="test-title" class="mb-4"></h3>
 
-  <?php foreach ($test['questions'] as $index => $question): ?>
-    <div class="mb-4">
-      <h5><?php echo ($index + 1) . '. ' . $question['question']; ?></h5>
-      <ul class="list-group">
-        <?php foreach ($question['choices'] as $choice): ?>
-          <li class="list-group-item d-flex justify-content-between align-items-center">
-            <span>
-              <i class="bi bi-circle<?php echo ($question['selected'] == $choice) ? '-fill' : ''; ?> me-2"></i> <?php echo $choice; ?>
-            </span>
-            
-            <?php if ($question['selected'] == $choice): ?>
-              <?php if ($choice == $question['correct']): ?>
-                <i class="bi bi-check-circle-fill text-success"></i> 
-              <?php else: ?>
-                <i class="bi bi-x-circle-fill text-danger"></i> 
-              <?php endif; ?>
-            <?php endif; ?>
-          </li>
-        <?php endforeach; ?>
-      </ul>
-    </div>
-  <?php endforeach; ?>
-
-  <div style="max-height: 500px; overflow-y: auto;">
-  </div>
+  <div id="question-container"></div>
 
   <a href="index.php?page=history&num_page=<?php echo $current_page; ?>" class="btn btn-primary mt-3">Back to history</a>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const attemptId = <?php echo json_encode($attempt_id); ?>;
+  const currentPage = <?php echo json_encode($current_page); ?>;
+  console.log(attemptId); 
+  fetch('index.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      ajax: 1,
+      controller: 'pastattempt',
+      action: 'getPastAttempt',
+      attempt_id: attemptId
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.error) return alert(data.error);
+
+    renderTestReview(data);
+  })
+  .catch(err => console.error("Error loading past attempt:", err));
+});
+
+function renderTestReview(data) {
+  const title = document.getElementById("test-title");
+  const container = document.getElementById("question-container");
+  container.innerHTML = "";
+
+  const score = data.score;
+  const total = data.total_questions;
+
+  title.innerHTML = `Test Review: ${data.test_name} <span class="text-muted fs-5 ms-2">(${score}/${total})</span>`;
+  data.questions.forEach((q, i) => {
+    const choices = [q.ans1, q.ans2, q.ans3, q.ans4];
+    const listItems = choices.map((choice, index) => {
+      const choiceNumber = (index + 1).toString();  
+
+      const isSelected = q.chosen_answer === choiceNumber;
+      const isCorrect = q.correct_answer === choiceNumber;
+
+      let iconHTML = "";
+      if (isSelected) {
+        iconHTML = isCorrect
+          ? `<i class="bi bi-check-circle-fill text-success"></i>`
+          : `<i class="bi bi-x-circle-fill text-danger"></i>`;
+      }
+
+      return `
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <span>
+            <i class="bi bi-circle${isSelected ? '-fill' : ''} me-2"></i> ${choice}
+          </span>
+          ${iconHTML}
+        </li>
+      `;
+    }).join(""); 
+
+    const html = `
+      <div class="mb-4">
+        <h5>${i + 1}. ${q.description}</h5>
+        <ul class="list-group">${listItems}</ul>
+      </div>
+    `;
+
+    container.insertAdjacentHTML("beforeend", html);
+  });
+}
+</script>

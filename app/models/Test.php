@@ -367,7 +367,8 @@ class Test {
                 t.created_time,
                 t.status AS test_status,
                 t.image_path AS test_image,
-                t.test_name AS test_name
+                t.test_name AS test_name,
+                t.total_attempts as total_attempts
             FROM test t
             WHERE t.creator = ?
             AND t.status != 'deleted'
@@ -397,7 +398,8 @@ class Test {
                 'created_time' => $row['created_time'],
                 'status' => $row['test_status'],
                 'image_path' => $row['test_image'],
-                'test_name' => $row['test_name']
+                'test_name' => $row['test_name'],
+                'total_attempts' => $row['total_attempts']
             ];
         }
     
@@ -484,7 +486,6 @@ class Test {
     public static function getQuestionsOfTest($test_id) {
         $db = Database::connect();
     
-        // SQL query to fetch questions and associated data from the 'test_have_questions' and 'question' tables
         $query = "
             SELECT tq.question_number, q.description, q.ans1, q.ans2, q.ans3, q.ans4, q.correct_answer, q.image_path
             FROM test_have_question tq
@@ -512,14 +513,257 @@ class Test {
                 ];
             }
     
-            // Close the prepared statement and return the result
             $stmt->close();
     
             return $questions;
         } else {
-            // Handle error if the query fails
             return false;
         }
     }
+    public static function getPreviewQuestionsOfTest($test_id) {
+        $db = Database::connect();
+    
+        // First, get test information
+        $testQuery = "SELECT test_name, number_of_questions FROM test WHERE test_id = ?";
+        $testInfo = null;
+    
+        if ($stmtTest = $db->prepare($testQuery)) {
+            $stmtTest->bind_param("i", $test_id);
+            $stmtTest->execute();
+            $resultTest = $stmtTest->get_result();
+            $testInfo = $resultTest->fetch_assoc();
+            $stmtTest->close();
+        }
+    
+        // If test not found, return false or null
+        if (!$testInfo) {
+            return false;
+        }
+    
+        // Then get the preview questions
+        $query = "
+            SELECT tq.question_number, q.description, q.ans1, q.ans2, q.ans3, q.ans4, q.image_path
+            FROM test_have_question tq
+            JOIN question q ON tq.question_id = q.question_id
+            WHERE tq.test_id = ?
+            ORDER BY tq.question_number ASC
+        ";
+    
+        $questions = [];
+    
+        if ($stmt = $db->prepare($query)) {
+            $stmt->bind_param("i", $test_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+    
+            while ($row = $result->fetch_assoc()) {
+                $questions[] = [
+                    'question_number' => $row['question_number'],
+                    'description' => $row['description'],
+                    'ans1' => $row['ans1'],
+                    'ans2' => $row['ans2'],
+                    'ans3' => $row['ans3'],
+                    'ans4' => $row['ans4'],
+                    'imagePath' => $row['image_path']
+                ];
+            }
+    
+            $stmt->close();
+        }
+    
+        return [
+            'test_name' => $testInfo['test_name'],
+            'number_of_questions' => $testInfo['number_of_questions'],
+            'questions' => $questions
+        ];
+    }
+    public static function startTestAttempt($test_id, $user_id) {
+        $db = Database::connect();
+        
+        // Insert a new record into the test_attempt table
+        $query = "INSERT INTO test_attempt (status, start_time, current_question, score, user_id, test_id) 
+                  VALUES ('IN_PROGRESS', NOW(), 1, 0, ?, ?)";
+        $stmt = $db->prepare($query);
+        $stmt->bind_param("ii", $user_id, $test_id);
+        $stmt->execute();
+        
+        $attempt_id = $stmt->insert_id;
+        
+        return $attempt_id;
+    }
+    public static function getAttempt($attempt_id) {
+        $db = Database::connect();
+        if (!$db) return false;
+    
+        // Step 1: Get attempt metadata
+        $metaQuery = "SELECT ta.start_time, test.total_time, ta.current_question, ta.test_id
+                      FROM test_attempt ta
+                      JOIN test ON ta.test_id = test.test_id
+                      WHERE ta.attempt_id = ?";
+        $stmt = $db->prepare($metaQuery);
+        if (!$stmt) return false;
+        $stmt->bind_param("i", $attempt_id);
+        $stmt->execute();
+        $metaResult = $stmt->get_result();
+        if (!$metaResult || !$metaRow = $metaResult->fetch_assoc()) return false;
+    
+        $start_time = $metaRow['start_time'];
+        $total_time = (int) $metaRow['total_time'];
+        $current_question = (int) $metaRow['current_question'];
+        $test_id = (int) $metaRow['test_id'];
+        $stmt->close();
+    
+        // Step 2: Count total number of questions
+        $countQuery = "SELECT COUNT(*) AS total FROM test_have_question WHERE test_id = ?";
+        $stmt = $db->prepare($countQuery);
+        if (!$stmt) return false;
+        $stmt->bind_param("i", $test_id);
+        $stmt->execute();
+        $countResult = $stmt->get_result();
+        $total_questions = ($countResult && $row = $countResult->fetch_assoc()) ? (int) $row['total'] : 0;
+        $stmt->close();
+    
+        if ($total_questions === 0) return false;
+    
+        // Step 3: If test is finished
+        if ($current_question > $total_questions) {
+            $scoreQuery = "SELECT COUNT(*) AS correct 
+                           FROM chosen_answer ta
+                           JOIN question q ON ta.question_id = q.question_id
+                           WHERE ta.attempt_id = ? AND ta.answer = q.correct_answer";
+            $stmt = $db->prepare($scoreQuery);
+            if (!$stmt) return false;
+            $stmt->bind_param("i", $attempt_id);
+            $stmt->execute();
+            $scoreResult = $stmt->get_result();
+            $correct = ($scoreResult && $row = $scoreResult->fetch_assoc()) ? (int) $row['correct'] : 0;
+            $stmt->close();
+    
+            // Update attempt status and score
+            $updateQuery = "UPDATE test_attempt SET status = 'finished', score = ? WHERE attempt_id = ?";
+            $stmt = $db->prepare($updateQuery);
+            if ($stmt) {
+                $stmt->bind_param("ii", $correct, $attempt_id);
+                $stmt->execute();
+                $stmt->close();
+            }
+    
+            return [
+                "finished" => true,
+                "correct_answers" => $correct,
+                "total_questions" => $total_questions
+            ];
+        }
+    
+        // Step 4: Fetch current question
+        $query = "SELECT tq.question_id, q.description, q.ans1, q.ans2, q.ans3, q.ans4, q.image_path, q.correct_answer
+                  FROM test_have_question tq
+                  JOIN question q ON tq.question_id = q.question_id
+                  WHERE tq.test_id = ? AND tq.question_number = ?";
+        $stmt = $db->prepare($query);
+        if (!$stmt) return false;
+        $stmt->bind_param("ii", $test_id, $current_question);
+        $stmt->execute();
+        $result = $stmt->get_result();
+    
+        if ($row = $result->fetch_assoc()) {
+            $elapsed_time = time() - strtotime($start_time);
+            $remaining_time = max(0, ($total_time * 60) - $elapsed_time);
+            $stmt->close();
+    
+            return [
+                'remaining_time' => $remaining_time,
+                'current_question' => $current_question,
+                'total_questions' => $total_questions,
+                'question' => [
+                    'description' => $row['description'] ?? '',
+                    'ans1' => $row['ans1'] ?? '',
+                    'ans2' => $row['ans2'] ?? '',
+                    'ans3' => $row['ans3'] ?? '',
+                    'ans4' => $row['ans4'] ?? '',
+                    'image_path' => $row['image_path'] ?? '',
+                    'correct_answer' => $row['correct_ans'] ?? null
+                ]
+            ];
+        }
+    
+        return false;
+    }
+            
+    public static function nextQuestion($attempt_id) {
+        $db = Database::connect();
+        
+        $query = "SELECT current_question, test_id
+                  FROM test_attempt
+                  WHERE attempt_id = ?";
+        $stmt = $db->prepare($query);
+        $stmt->bind_param("i", $attempt_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+    
+        if ($row = $result->fetch_assoc()) {
+            $current_question = $row['current_question'];
+    
+            $next_question = $current_question + 1;
+    
+            $query = "UPDATE test_attempt
+                      SET current_question = ?
+                      WHERE attempt_id = ?";
+            $stmt = $db->prepare($query);
+            $stmt->bind_param("ii", $next_question, $attempt_id);
+            $stmt->execute();
+    
+            return self::getAttempt($attempt_id); 
+        }
+        
+        return false; 
+    }
+    
+    public static function saveAnswer($attempt_id, $answer) {
+        $db = Database::connect();
+    
+        $query = "SELECT current_question, test_id 
+                  FROM test_attempt 
+                  WHERE attempt_id = ?";
+        $stmt = $db->prepare($query);
+        $stmt->bind_param("i", $attempt_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        if (!$row = $result->fetch_assoc()) {
+            return ["status" => "error", "message" => "Attempt not found."];
+        }
+    
+        $current_question = $row['current_question'];
+        $test_id = $row['test_id'];
+    
+        $query = "SELECT question_id 
+                  FROM test_have_question 
+                  WHERE test_id = ? AND question_number = ?";
+        $stmt = $db->prepare($query);
+        $stmt->bind_param("ii", $test_id, $current_question);
+        $stmt->execute();
+        $result = $stmt->get_result();
+    
+        if (!$row = $result->fetch_assoc()) {
+            return ["status" => "error", "message" => "Question not found."];
+        }
+    
+        $question_id = $row['question_id'];
+    
+        $query = "INSERT INTO chosen_answer (question_id, attempt_id, answer)
+                  VALUES (?, ?, ?)
+                  ON DUPLICATE KEY UPDATE answer = VALUES(answer)";
+        $stmt = $db->prepare($query);
+        $stmt->bind_param("iis", $question_id, $attempt_id, $answer);
+        $stmt->execute();
+    
+        return ["status" => "success", "question_id" => $question_id];
+    }
+    
+    
+
+    
+
 }    
 ?>

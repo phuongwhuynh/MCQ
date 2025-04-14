@@ -68,5 +68,6 @@ class QuestionController {
         $response=Question::getCachedAdminCurrentQuestion($_SESSION['user_id']);
         echo json_encode($response);
     }
+    
 }
 ?>

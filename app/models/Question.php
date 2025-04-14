@@ -143,33 +143,33 @@ public static function cacheAdminCurrentQuestion($description, $ans1, $ans2, $an
         }
     }
 
-    if ($image_tmp && $fileExt) {
-        $fileExt = strtolower($fileExt);
-        $uploadPath = "images/current_questions/" . $creator . "." . $fileExt;
+    // if ($image_tmp && $fileExt) {
+    //     $fileExt = strtolower($fileExt);
+    //     $uploadPath = "images/current_questions/" . $creator . "." . $fileExt;
     
 
     
-        $safePath = $conn->real_escape_string($uploadPath);
-        $updateQuery = "UPDATE admin_cur_question SET image_path = ? WHERE creator = ?";
-        $updateStmt = $conn->prepare($updateQuery);
-        $updateStmt->bind_param("si", $safePath, $creator);
+    //     $safePath = $conn->real_escape_string($uploadPath);
+    //     $updateQuery = "UPDATE admin_cur_question SET image_path = ? WHERE creator = ?";
+    //     $updateStmt = $conn->prepare($updateQuery);
+    //     $updateStmt->bind_param("si", $safePath, $creator);
     
-        if (!$updateStmt->execute()) {
-            $conn->rollback();
-            return [
-                "success" => false,
-                "message" => "Error saving image path for cached question: " . $updateStmt->error
-            ];
-        }
+    //     if (!$updateStmt->execute()) {
+    //         $conn->rollback();
+    //         return [
+    //             "success" => false,
+    //             "message" => "Error saving image path for cached question: " . $updateStmt->error
+    //         ];
+    //     }
     
-        if (!copy($image_tmp, $uploadPath)) {
-            $conn->rollback();
-            return [
-                "success" => false,
-                "message" => "Temporary question created but could not copy the image. Changes have been discarded."
-            ];
-        }
-    }
+    //     if (!copy($image_tmp, $uploadPath)) {
+    //         $conn->rollback();
+    //         return [
+    //             "success" => false,
+    //             "message" => "Temporary question created but could not copy the image. Changes have been discarded."
+    //         ];
+    //     }
+    // }
     
     $conn->commit();
     return [
@@ -215,6 +215,7 @@ public static function getCachedAdminCurrentQuestion($creator) {
         ];
     }
 }
+
 
         
 }

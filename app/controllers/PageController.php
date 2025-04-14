@@ -16,7 +16,7 @@ class PageController {
     }
 
     private static function loadGuestView($page) {
-        $allowedPages = ["home","login","register","forgot","about","resources","contact"];
+        $allowedPages = ["home","login","register","forgot","about","resources","contact","preview"];
         if (!in_array($page, $allowedPages)) {
             require_once "../app/views/404.php";
         }
@@ -27,7 +27,7 @@ class PageController {
     }
 
     private static function loadUserView($page){
-        $allowedPages = ["home","about","resources","contact","history","dashboard", "past_attempt"];
+        $allowedPages = ["home","about","resources","contact","history","dashboard", "past_attempt","preview","attempt","result"];
         if (!in_array($page, $allowedPages)) {
             require_once "../app/views/404.php";
         }
