@@ -38,7 +38,7 @@ class Resources {
                 t.image_path AS test_image,
                 t.test_name AS test_name
             FROM test t
-            WHERE t.status != 'deleted'
+            WHERE t.status = 'public'
             $inCate
             $searchCondition
             ORDER BY $orderBy
