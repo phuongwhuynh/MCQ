@@ -144,28 +144,4 @@ BEGIN
 END$$
 DELIMITER ;
 
-SELECT 
-	t.test_name AS test_name,
-	q.description,
-	q.ans1,
-	q.ans2,
-	q.ans3,
-	q.ans4,
-	q.correct_answer,
-	ca.answer AS chosen_answer,
-	thq.question_number,
-	tq.total_questions,
-	ta.score
-FROM test_attempt ta
-JOIN test t ON ta.test_id = t.test_id
-JOIN test_have_question thq ON ta.test_id = thq.test_id
-JOIN question q ON thq.question_id = q.question_id
-LEFT JOIN chosen_answer ca 
-	ON ca.question_id = q.question_id AND ca.attempt_id = ta.attempt_id
-JOIN (
-	SELECT test_id, COUNT(*) AS total_questions
-	FROM test_have_question
-	GROUP BY test_id
-) tq ON ta.test_id = tq.test_id
-WHERE ta.attempt_id = 1
-ORDER BY thq.question_number ASC
+SELECT * from test;
