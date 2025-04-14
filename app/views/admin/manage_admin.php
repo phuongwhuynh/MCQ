@@ -194,7 +194,9 @@ function fetchTests(page = 1) {
                   <td>${test.test_category || "-"}</td>
                   <td>${new Date(test.created_time).toLocaleDateString()}</td>
                   <td>${test.image_path ? `<img src="public/${test.image_path}" width="50">` : "-"}</td>
-                  <td>${test.status}</td>
+                  <td style="color: ${test.status === 'public' ? 'green' : test.status === 'private' ? 'purple' : 'red'};">
+                    ${test.status.charAt(0).toUpperCase()+test.status.slice(1).toLowerCase()}
+                  </td>                  
                   <td>${test.total_attempts}</td>
                   <td>
                     <button class="btn btn-sm btn-info view-questions" data-id="${test.test_id}">

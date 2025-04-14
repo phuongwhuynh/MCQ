@@ -2,7 +2,7 @@
 require_once "../app/models/Resources.php";
 class ResourcesController {
     public static function fetchTest() {
-        $page = isset($_GET['pageNum']) ? (int)$_GET['pageNum'] : 1;
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
         $limit = 12;
         $sort = $_GET['sort'] ?? "total_attempts_desc";
         $categories = isset($_GET['categories']) ? array_filter(explode(",", $_GET["categories"])) : [];

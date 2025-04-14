@@ -204,7 +204,7 @@ function fetchQuestions(page = 1) {
 
     const selectedCategories = $('#category-filter').val() || [];
     const questionSearch = document.getElementById('search-input').value;
-
+    console.log(questionSearch)
     const queryParams = new URLSearchParams({
         pageNum: page,
         sort: questionSort,
@@ -415,7 +415,7 @@ document.querySelector('form').addEventListener('submit', function(event) {
     if (data.success) {
       alert('Quiz created successfully!');
       // Optionally, clear the form or redirect
-      // clearForm();
+      clearForm();
     } else {
       alert('Error creating quiz: ' + data.message);
     }

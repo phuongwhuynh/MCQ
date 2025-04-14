@@ -33,15 +33,13 @@
         </form>
 
         <div class="divider">
-          <hr />
-          <span><div class="text-center my-3">or</div></span>
-          <hr />
+
         </div>
 
         <div class="d-flex justify-content-center gap-3">
-          <button class="btn btn-outline-danger">
+          <!-- <button class="btn btn-outline-danger">
             <i class="fab fa-google"></i>
-          </button>
+          </button> -->
           <!-- <button class="btn btn-outline-primary">
             <i class="fab fa-facebook-f"></i>
           </button>

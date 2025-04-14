@@ -108,7 +108,6 @@ INSERT INTO category (cate) VALUES ('Math'),('Literature'),('Science'),('History
 
 
 
-
 DROP TABLE IF EXISTS test_attempt;
 CREATE TABLE test_attempt(
 	attempt_id INT UNSIGNED PRIMARY KEY auto_increment,

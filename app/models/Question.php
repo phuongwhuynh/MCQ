@@ -216,7 +216,21 @@ public static function getCachedAdminCurrentQuestion($creator) {
     }
 }
 
+public static function deleteQuestion($question_id){
+    $db = Database::connect();
+        
+    $query = "UPDATE test SET status = 'deleted' WHERE test_id = ?";
+    
+    $stmt = $db->prepare($query);
+    $stmt->bind_param("i", $question_id);
+    
+    if ($stmt->execute()) {
+        return ['success' => true, 'message' => 'Test deleted successfully.'];
+    } else {
+        return ['success' => false, 'message' => 'Failed to deleted the test.'];
+    }
 
+}
         
 }
 ?>

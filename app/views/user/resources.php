@@ -51,9 +51,6 @@
 </div>
 
 <script>
-const urlParams = new URLSearchParams(window.location.search);
-let currentPage = parseInt(urlParams.get("currentPage")) || 1;
-
 document.addEventListener("DOMContentLoaded", () => {
   $('#category-filter').select2({
     placeholder: "Select categories",
@@ -64,16 +61,15 @@ document.addEventListener("DOMContentLoaded", () => {
   $('#category-filter').on('change', function() {
     fetchTest(1);
   });
-  const searchInput = document.getElementById("search-input");
-  const categorySelect = document.getElementById("category-filter");
-  const sortDropdown = document.getElementById("sort-dropdown");
 
-  searchInput.addEventListener("input", debounce(() => fetchTest(1), 300));
-  categorySelect.addEventListener("change", () => fetchTest(1));
-  sortDropdown.addEventListener("change", () => fetchTest(1));
+  document.getElementById("search-input").addEventListener("input", debounce(() => fetchTest(1), 300));
+  document.getElementById("sort-dropdown").addEventListener("change", () => fetchTest(1));
 
-  fetchTest(currentPage); 
+  // Initial load
+  const initialPage = parseInt(new URLSearchParams(window.location.search).get("currentPage")) || 1;
+  fetchTest(initialPage); 
 });
+
 function fetchTest(page = 1) {
   const searchTerm = document.getElementById("search-input").value;
   const selectedCategories = $('#category-filter').val() || [];
@@ -89,17 +85,16 @@ function fetchTest(page = 1) {
   fetch(`index.php?ajax=1&controller=resources&action=fetchTest&${params}`)
     .then(response => response.json())
     .then(data => {
-      renderTests(data.tests);
+      renderTests(data.tests, page);
       renderPagination(data.totalPages, page);
-      currentPage=page
     })
     .catch(err => console.error("Failed to fetch tests:", err));
 }
 
-function renderTests(tests) {
+function renderTests(tests, page) {
   const container = document.querySelector(".row1");
 
-  if (tests.length === 0) {
+  if (!tests.length) {
     container.innerHTML = '<p>No tests available at the moment.</p>';
     return;
   }
@@ -108,7 +103,7 @@ function renderTests(tests) {
     const imagePath = test.image_path ? `public/${test.image_path}` : 'public/images/tests/star.png';
     return `
       <div class="col-md-6 col-lg-3 mb-4">
-        <a class="text-dark text-decoration-none" href="index.php?page=preview&id=${test.test_id}&return_page=${currentPage}">
+        <a class="text-dark text-decoration-none" href="index.php?page=preview&id=${test.test_id}&return_page=${page}">
           <div class="card">
             <div style="height: 150px; overflow: hidden;">
               <img class="card-img-top" src="${imagePath}" alt="Test Image" style="height: 100%; width: 100%; object-fit: cover;">
@@ -124,7 +119,6 @@ function renderTests(tests) {
 
   container.innerHTML = tests.map(template).join("");
 }
-
 
 function renderPagination(totalPages, currentPage) {
   const container = document.querySelector(".pagination");
@@ -142,6 +136,7 @@ function renderPagination(totalPages, currentPage) {
 
   container.innerHTML = html;
 }
+
 
 function debounce(func, delay) {
   let timeout;
