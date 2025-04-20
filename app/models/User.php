@@ -133,4 +133,33 @@ class User
             ];
         }
     }
+    static public function getUserByEmail($email)
+    {
+        try {
+            $db = Database::connect();
+            $query = "SELECT * FROM users WHERE email = ?";
+            $stmt = $db->prepare($query);
+            $stmt->bind_param("s", $email);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            return $result->fetch_assoc();
+        } catch (mysqli_sql_exception $e) {
+            error_log("User::getUserByEmail error: " . $e->getMessage());
+            return null;
+        }
+    }
+    static public function updateLinkUserIfEmailExists($email, $google_id)
+    {
+        try {
+            $db = Database::connect();
+            $query = "UPDATE users SET google_id = ? WHERE email = ?";
+            $stmt = $db->prepare($query);
+            $stmt->bind_param("ss", $google_id, $email);
+            $stmt->execute();
+            return ["success" => true];
+        } catch (mysqli_sql_exception $e) {
+            error_log("User::updateLinkUserIfEmailExists error: " . $e->getMessage());
+            return ["success" => false, "message" => "An error occurred while linking the user."];
+        }
+    }
 }

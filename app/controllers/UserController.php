@@ -61,10 +61,8 @@ class UserController
             echo json_encode(["success" => false, "message" => "Missing Google account data"]);
             return;
         }
-
         // Check if user already exists
         $user = User::getUserByGoogleId($google_id);
-
         if ($user) {
             // User exists, log them in
             $_SESSION['user_role'] = $user['role'];
@@ -73,6 +71,18 @@ class UserController
             header('Content-Type: application/json');
             echo json_encode(["success" => true, "user_role" => $data['role']]);
         } else {
+            $userByEmail = User::getUserByEmail($email);
+            if ($userByEmail) {
+                $updateUser = User::updateLinkUserIfEmailExists($email, $google_id);
+                // User exists, log them in
+                if ($updateUser['success'] == true) {
+                    $_SESSION['user_role'] = $userByEmail['role'];
+                    $_SESSION['user_id'] = $userByEmail['user_id'];
+                    $_SESSION['username'] = $userByEmail['username'];
+                    header('Content-Type: application/json');
+                    echo json_encode(["success" => true, "user_role" => $data['role']]);
+                }
+            }
             $response = User::createUser(explode("@", $email)[0], null, $email, $name, "user", $google_id);
             $_SESSION['user_role'] = $response['user']['role'];
             $_SESSION['user_id'] = $response['user']['user_id'];
