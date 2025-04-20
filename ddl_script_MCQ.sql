@@ -144,3 +144,7 @@ END$$
 DELIMITER ;
 
 SELECT * from test;
+
+ALTER TABLE users
+ADD COLUMN google_id VARCHAR(255) UNIQUE AFTER email,
+ALTER COLUMN password_hash VARCHAR(255) NULL;
