@@ -1,7 +1,7 @@
 
 <div class="container">
-<h1 class="fw-bold text-center my-5">Explore Our Exam</h1>
-<div class="container-fluid m-0">
+  <h1 class="fw-bold text-center my-5">Explore Our Exam</h1>
+  <div class="container-fluid m-0">
     <form class="d-flex" action="">
         <input class="form-control" id="search-input" placeholder="Search tests..." type="text" />
     </form>
@@ -29,27 +29,17 @@
         </select>
       </div>
     </div>
+  </div>
+
+  <div class="row1 row my-5"></div>
 </div>
 
-<div class="row1 row my-5"></div>
-
-
-
-
+<div class="my-5">
+  <nav>
+  <ul class="pagination justify-content-center" id="pagination"></ul>
+  </nav>
 </div>
 
-<div class="page my-5">
-<div class="pagination">
-  <a href="#">&laquo;</a>
-  <a class="active" href="#">1</a>
-  <a href="#">2</a>
-  <a href="#">3</a>
-  <a href="#">4</a>
-  <a href="#">5</a>
-  <a href="#">6</a>
-  <a href="#">&raquo;</a>
-</div>
-</div>
 <script>
   <?php
   $initialPage = isset($_GET['currentPage']) ? (int)$_GET['currentPage'] : 1;
@@ -127,22 +117,67 @@ function renderTests(tests, page) {
   container.innerHTML = tests.map(template).join("");
 }
 
+// function renderPagination(totalPages, currentPage) {
+//   const container = document.querySelector(".pagination");
+//   if (!container) return;
+
+//   let html = '';
+
+//   html += `<a href="#" onclick="fetchTest(${Math.max(1, currentPage - 1)}); return false;">&laquo;</a>`;
+
+//   for (let i = 1; i <= totalPages; i++) {
+//     html += `<a href="#" class="${i === currentPage ? 'active' : ''}" onclick="fetchTest(${i}); return false;">${i}</a>`;
+//   }
+
+//   html += `<a href="#" onclick="fetchTest(${Math.min(totalPages, currentPage + 1)}); return false;">&raquo;</a>`;
+
+//   container.innerHTML = html;
+// }
 function renderPagination(totalPages, currentPage) {
-  const container = document.querySelector(".pagination");
-  if (!container) return;
+  const paginationContainer = document.getElementById('pagination');
+  if (!paginationContainer) return;
 
-  let html = '';
+  paginationContainer.innerHTML = ''; // clear old <li>
 
-  html += `<a href="#" onclick="fetchTest(${Math.max(1, currentPage - 1)}); return false;">&laquo;</a>`;
+  const createPageItem = (page, label, isActive = false, isDisabled = false) => {
+    const li = document.createElement('li');
+    li.className = `page-item ${isActive ? 'active' : ''} ${isDisabled ? 'disabled' : ''}`;
+    li.innerHTML = `<a class="page-link" href="#">${label}</a>`;
+    li.querySelector('a').addEventListener('click', (e) => {
+      e.preventDefault();
+      if (!isDisabled && !isActive) fetchTest(page); // or fetchQuestions(page)
+    });
+    return li;
+  };
 
-  for (let i = 1; i <= totalPages; i++) {
-    html += `<a href="#" class="${i === currentPage ? 'active' : ''}" onclick="fetchTest(${i}); return false;">${i}</a>`;
+  paginationContainer.appendChild(createPageItem(currentPage - 1, '«', false, currentPage === 1));
+
+  if (totalPages < 5) {
+    for (let i = 1; i <= totalPages; i++) {
+      paginationContainer.appendChild(createPageItem(i, i, i === currentPage));
+    }
+  } else {
+    if (currentPage > 3) {
+      paginationContainer.appendChild(createPageItem(1, 1));
+      paginationContainer.appendChild(createPageItem(0, '...', true, true));
+    }
+
+    const startPage = Math.max(2, currentPage - 2);
+    const endPage = Math.min(totalPages - 1, currentPage + 2);
+
+    for (let i = startPage; i <= endPage; i++) {
+      paginationContainer.appendChild(createPageItem(i, i, i === currentPage));
+    }
+
+    if (currentPage < totalPages - 2) {
+      paginationContainer.appendChild(createPageItem(0, '...', true, true));
+      paginationContainer.appendChild(createPageItem(totalPages, totalPages));
+    }
   }
 
-  html += `<a href="#" onclick="fetchTest(${Math.min(totalPages, currentPage + 1)}); return false;">&raquo;</a>`;
-
-  container.innerHTML = html;
+  paginationContainer.appendChild(createPageItem(currentPage + 1, '»', false, currentPage === totalPages));
 }
+
 
 
 function debounce(func, delay) {

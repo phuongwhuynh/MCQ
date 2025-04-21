@@ -47,10 +47,7 @@
     border-radius: 20px;
     box-shadow: -14px 10px 40px rgba(0, 0, 0, 0.3);
   }
-  .custom-width {
-    width: 40%;
-    max-width: 1200px;
-  }
+ 
   form div {
     margin: 15px;
   }

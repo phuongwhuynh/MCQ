@@ -1,5 +1,6 @@
 .register-container {
-    max-width: 400px;
+    max-width: 500px;
+    width: 100%;
     background: white;
     padding: 30px;
     border-radius: 10px;
@@ -77,25 +78,24 @@ input[type="password"]::-ms-reveal {
     border-radius: 20px;
     box-shadow: -14px 10px 40px rgba(0, 0, 0, 0.3);
 }
-.custom-width {
-    width: 40%;
-    max-width: 1200px;
-}
-.custom-register {
-    width: 50%;
-    max-width: 1200px;
-    /* height: 600px; */
-    /* max-height: 12000px; */
-}
+
+
 form div {
     margin: 15px;
 }
 form button {
     height: 45px;
 }
+#registerForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 #registerForm div {
-    margin-left: 70px;
-    margin-right: 70px;
+    margin-left: 24px;
+    margin-right: 24px;
+    max-width: 350px;
+    width: 100%;
 }  
 
 @media (max-width: 576px) {

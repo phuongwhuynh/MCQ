@@ -1,5 +1,5 @@
 <div class="container d-flex flex-column align-items-center justify-content-center">
-      <div class="register-container custom-register">
+      <div class="register-container">
         <h3 class="text-center display- font-weight-bold">Register</h3>
         <div class="password-requirements">
           <h4>Password Requirements:</h4>
@@ -77,7 +77,7 @@
           <div class="mb-4 text-center">
             <label class="form-label fw-bold d-block m-0">Register As:</label> 
             <div class="d-flex justify-content-center m-0">
-              <div class="btn-group w-100" style="max-width: 400px;" role="group" aria-label="Role selection">
+              <div class="btn-group w-100" style="max-width: 200px;"  role="group" aria-label="Role selection">
                 <input type="radio" class="btn-check" name="role" id="userRole" value="user" autocomplete="off" checked />
                 <label class="btn btn-outline-primary w-50" for="userRole">User</label>
 

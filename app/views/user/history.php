@@ -40,7 +40,7 @@ function fetchFinishedAttempts(page = 1) {
       if (data.error) return alert(data.error);
       currentPage = page;  
       renderAttempts(data.attempts, page);
-      renderPagination(data.total, page);
+      renderPagination(Math.ceil(data.total/10), page);
     })
     .catch(err => console.error("Fetch error:", err));
 }
@@ -73,27 +73,47 @@ function renderAttempts(attempts, page) {
 }
 
 
-function renderPagination(total, current) {
-  const pageCount = Math.ceil(total / 10); // Ensure 10 items per page
-  const ul = document.getElementById("pagination");
-  ul.innerHTML = "";
+function renderPagination(totalPages, currentPage) {
+  const paginationContainer = document.getElementById('pagination');
+  paginationContainer.innerHTML = '';  
 
-  const addPage = (p, label = p, disabled = false, active = false) => {
-    const li = document.createElement("li");
-    li.className = `page-item${disabled ? " disabled" : ""}${active ? " active" : ""}`;
-    li.innerHTML = `<a class="page-link" href="#" data-page="${p}">${label}</a>`;
-    ul.appendChild(li);
+  const createPageItem = (page, label, isActive = false, isDisabled = false) => {
+    const li = document.createElement('li');
+    li.className = `page-item ${isActive ? 'active' : ''} ${isDisabled ? 'disabled' : ''}`;
+    li.innerHTML = `<a class="page-link" href="#">${label}</a>`;
+    li.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (!isDisabled && !isActive) fetchFinishedAttempts(page);  
+    });
+    return li;
   };
 
-  addPage(current - 1, "Previous", current === 1);
+  paginationContainer.appendChild(createPageItem(currentPage - 1, 'Previous', false, currentPage === 1));
 
-  // Page number buttons
-  for (let i = 1; i <= pageCount; i++) {
-    addPage(i, i, false, i === current);
+  if (totalPages < 5) {
+    for (let i = 1; i <= totalPages; i++) {
+      paginationContainer.appendChild(createPageItem(i, i, i === currentPage));
+    }
+  } else {
+    if (currentPage > 3) {
+      paginationContainer.appendChild(createPageItem(1, 1));
+      paginationContainer.appendChild(createPageItem(0, '...', true));  
+    }
+
+    const startPage = Math.max(currentPage - 2, 2);  
+    const endPage = Math.min(currentPage + 2, totalPages - 1);  
+
+    for (let i = startPage; i <= endPage; i++) {
+      paginationContainer.appendChild(createPageItem(i, i, i === currentPage));
+    }
+
+    if (currentPage < totalPages - 2) {
+      paginationContainer.appendChild(createPageItem(0, '...', true)); 
+      paginationContainer.appendChild(createPageItem(totalPages, totalPages));
+    }
   }
 
-  // Next page button
-  addPage(current + 1, "Next", current === pageCount);
+  paginationContainer.appendChild(createPageItem(currentPage + 1, 'Next', false, currentPage === totalPages));
 }
 
 document.addEventListener("DOMContentLoaded", () => {
