@@ -1,5 +1,5 @@
 <div id="bg" class="container-fluid">
-  <img class="img-fluid" src="public/images/slbk.jpg" alt="slbk.jpg" width="100%" height="100%">
+  <img class="img-fluid" src="/MCQ/public/images/slbk.jpg" alt="slbk.jpg" width="100%" height="100%">
 </div>
 
 <div class="container exam-section">

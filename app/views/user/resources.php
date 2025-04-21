@@ -1,3 +1,4 @@
+
 <div class="container">
 <h1 class="fw-bold text-center my-5">Explore Our Exam</h1>
 <div class="container-fluid m-0">
@@ -49,6 +50,12 @@
   <a href="#">&raquo;</a>
 </div>
 </div>
+<script>
+  <?php
+  $initialPage = isset($_GET['currentPage']) ? (int)$_GET['currentPage'] : 1;
+  ?>  
+  const initialPage = <?= $initialPage ?>;
+</script>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
@@ -66,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("sort-dropdown").addEventListener("change", () => fetchTest(1));
 
   // Initial load
-  const initialPage = parseInt(new URLSearchParams(window.location.search).get("currentPage")) || 1;
+
   fetchTest(initialPage); 
 });
 
@@ -100,10 +107,10 @@ function renderTests(tests, page) {
   }
 
   const template = (test) => {
-    const imagePath = test.image_path ? `public/${test.image_path}` : 'public/images/tests/star.png';
+    const imagePath = test.image_path ? `/MCQ/public/${test.image_path}` : '/MCQ/public/images/tests/star.png';
     return `
       <div class="col-md-6 col-lg-3 mb-4">
-        <a class="text-dark text-decoration-none" href="index.php?page=preview&id=${test.test_id}&return_page=${page}">
+        <a class="text-dark text-decoration-none" href="/MCQ/preview/${test.test_id}/${page}">
           <div class="card">
             <div style="height: 150px; overflow: hidden;">
               <img class="card-img-top" src="${imagePath}" alt="Test Image" style="height: 100%; width: 100%; object-fit: cover;">

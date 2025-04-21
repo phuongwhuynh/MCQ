@@ -95,7 +95,7 @@
         </form>
         <div class="text-center mt-3">
           Already have an account?
-          <a href="index.php?page=login" class="fw-bold text-decoration-none text-dark">Login</a>
+          <a href="/MCQ/login" class="fw-bold text-decoration-none text-dark">Login</a>
         </div>
       </div>
 </div>

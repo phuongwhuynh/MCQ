@@ -2,12 +2,14 @@ DROP DATABASE IF EXISTS mcq_db;
 CREATE DATABASE mcq_db;
 USE mcq_db;
 
+
 DROP TABLE IF EXISTS users;
 CREATE TABLE users (
 	user_id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(50) NOT NULL,
-    password_hash CHAR(255) NOT NULL,
+    password_hash CHAR(255) NULL,
 	email VARCHAR(255),
+    google_id VARCHAR(255) UNIQUE,
     name VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
     role ENUM('admin','user')
 );

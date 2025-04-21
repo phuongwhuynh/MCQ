@@ -27,19 +27,11 @@
     </div>
 
     <div class="d-flex justify-content-center gap-3">
-      <div class="" id="googleSignInButton">
-        <!-- <i class="fab fa-google"></i> -->
-      </div>
-      <!-- <button class="btn btn-outline-primary">
-            <i class="fab fa-facebook-f"></i>
-          </button>
-          <button class="btn btn-outline-dark">
-            <i class="fab fa-apple"></i>
-          </button> -->
+      <div class="" id="googleSignInButton"></div>
     </div>
     <div class="text-center mt-3">
       Don't have an account?
-      <a href="index.php?page=register" class="fw-bold text-decoration-none text-dark">Register Now</a>
+      <a href="/MCQ/register" class="fw-bold text-decoration-none text-dark">Register Now</a>
     </div>
   </div>
 
@@ -73,7 +65,7 @@
         .then(data => {
           // Xử lý kết quả trả về từ server
           console.log(data);
-          window.location.href = "index.php?page=home";
+          window.location.href = "/MCQ/home";
         });
     }
 

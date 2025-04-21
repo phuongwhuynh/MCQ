@@ -10,15 +10,15 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <link rel="stylesheet" href="public/css/layout.css">
+  <link rel="stylesheet" href="/MCQ/public/css/layout.css">
   <?php
-  $cssWebPath = "public/css/$page.css";
-  $jsPath = "public/js/$page.js";
+  $cssWebPath = "/MCQ/public/css/$page.css";
+  $jsPath = "/MCQ/public/js/$page.js";
   ?>
   <link rel="stylesheet" href="<?php echo $cssWebPath; ?>">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="<?php echo $jsPath ?>" defer></script>
-  <script src="public/js/main.js" defer></script>
+  <script src="/MCQ/public/js/main.js" defer></script>
 
 </head>
 
@@ -26,24 +26,24 @@
   <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
       <div class="container">
-        <a class="navbar-brand text-primary fw-bold" href="index.php?page=home">iExam</a>
+        <a class="navbar-brand text-primary fw-bold" href="/MCQ/home">iExam</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item"><a class="nav-link <?php echo ($page == 'home') ? 'active' : ''; ?>"
-                href="index.php?page=home">Home</a></li>
+                href="/MCQ/home">Home</a></li>
             <li class="nav-item"><a class="nav-link <?php echo ($page == 'about') ? 'active' : ''; ?>"
-                href="index.php?page=about">About</a></li>
+                href="about">About</a></li>
             <?php if ($_SESSION['user_role'] === "user"): ?>
               <li class="nav-item"><a class="nav-link <?php echo ($page == 'dashboard') ? 'active' : ''; ?>"
-                  href="index.php?page=dashboard">Dashboard</a></li>
+                  href="/MCQ/dashboard">Dashboard</a></li>
             <?php endif; ?>
             <li class="nav-item"><a class="nav-link <?php echo ($page == 'resources') ? 'active' : ''; ?>"
-                href="index.php?page=resources">Resources</a></li>
+                href="/MCQ/resources">Resources</a></li>
             <li class="nav-item"><a class="nav-link <?php echo ($page == 'contact') ? 'active' : ''; ?>"
-                href="index.php?page=contact">Contact</a></li>
+                href="/MCQ/contact">Contact</a></li>
           </ul>
           <?php if ($_SESSION['user_role'] === "user"): ?>
 
@@ -65,17 +65,17 @@
                   <li>
                     <hr class="dropdown-divider">
                   </li>
-                  <li><a class="dropdown-item" href="index.php?page=history"><i
+                  <li><a class="dropdown-item" href="/MCQ/history"><i
                         class="bi bi-clock-history me-2"></i>History</a></li>
                 </ul>
               </div>
               <button class="btn btn-primary ms-3" onclick="logout()">Logout</button>
             </div>
           <?php else: ?>
-            <?php echo $$_SESSION['user_id'] ?>
+            <?php //echo $$_SESSION['user_id'] ?>
             <div class="d-flex justify-content-end me-5">
-              <a href="index.php?page=login" class="btn btn-outline-dark ms-2">Login</a>
-              <a href="index.php?page=register" class="btn btn-primary ms-3">Get Started</a>
+              <a href="/MCQ/login" class="btn btn-outline-dark ms-2">Login</a>
+              <a href="/MCQ/register" class="btn btn-primary ms-3">Get Started</a>
             </div>
           <?php endif; ?>
         </div>
@@ -105,22 +105,22 @@
           <div class="row" style="height: 100%;">
             <div class="col mt-4 text-center">
               <b class="m-1"><span class="text-dark text-decoration-none">Company</span></b>
-              <p class="m-1"><a class="text-dark text-decoration-none" href="index.php?page=about">About
+              <p class="m-1"><a class="text-dark text-decoration-none" href="/MCQ/about">About
                   us</a></p>
               <p class="m-1"><a class="text-dark text-decoration-none"
-                  href="index.php?page=contact">Contact us</a></p>
+                  href="/MCQ/contact">Contact us</a></p>
               <p class="m-1"><a class="text-dark text-decoration-none"
-                  href="index.php?page=resources">Resources</a></p>
+                  href="/MCQ/resources">Resources</a></p>
             </div>
             <?php if ($_SESSION['user_role'] === "guest"): ?>
               <div class="col d-flex flex-column align-items-center p-3">
                 <div class="btn-block">
                   <div>
-                    <a href="index.php?page=register"
+                    <a href="/MCQ/register"
                       class="btn btn-outline-primary m-1 w-100">Register</a>
                   </div>
                   <div>
-                    <a href="index.php?page=login" class="btn btn-outline-primary m-1 w-100">Login</a>
+                    <a href="/MCQ/login" class="btn btn-outline-primary m-1 w-100">Login</a>
                   </div>
                 </div>
               </div>

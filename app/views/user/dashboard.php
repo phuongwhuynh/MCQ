@@ -45,11 +45,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         data.forEach(attempt => {
             const link = document.createElement('a');
-            link.href = `index.php?page=attempt&attempt_id=${attempt.attempt_id}`;
+            link.href = `/MCQ/attempt/${attempt.attempt_id}`;
             link.className = 'list-group-item list-group-item-action d-flex align-items-start gap-3 py-3 shadow-sm text-decoration-none text-dark';
 
             link.innerHTML = `
-                <img src="public/${attempt.image_path || 'images/tests/star.png'}" alt="Test Image"
+                <img src="/MCQ/public/${attempt.image_path || 'images/tests/star.png'}" alt="Test Image"
                      class="rounded" style="width: 100px; height: 70px; object-fit: cover;">
                 <div class="flex-grow-1">
                     <h5 class="mb-1">${attempt.test_name}</h5>

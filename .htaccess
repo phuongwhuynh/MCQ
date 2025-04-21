@@ -6,12 +6,19 @@ RewriteRule ^(app|includes)/ - [F,L]
 # Set public/index.php as the main index file
 DirectoryIndex public/index.php
 
-# Remove /public/ from the URL
-RewriteCond %{REQUEST_URI} ^/public/(.*)$ [NC]
-RewriteRule ^public/(.*)$ /$1 [L,R=301]
 
 
-# Redirect all other requests to public/index.php
+RewriteCond %{REQUEST_URI} !\.(jpg|jpeg|png|gif|css|js|svg|woff|woff2|tff)$ [NC]
+
+RewriteRule ^preview/([^/]+)/([^/]+)$ public/index.php?page=preview&id=$1&return_page=$2 [L,QSA]
+RewriteRule ^resources/([^/]+)$ public/index.php?page=resources&currentPage=$1 [L,QSA]
+RewriteRule ^attempt/([^/]+)$ public/index.php?page=attempt&attempt_id=$1 [L,QSA]
+RewriteRule ^past-attempt/([^/]+)/([^/]+)$ public/index.php?page=past-attempt&id=$1&num_page=$2 [L,QSA]
+RewriteRule ^history/([^/]+)$ public/index.php?page=history&num_page=$1 [L,QSA]
+
+
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
+
 RewriteRule ^(.*)$ public/index.php?page=$1 [L,QSA]
+

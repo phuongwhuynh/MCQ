@@ -21,7 +21,7 @@ function logout() {
       })
       .then(data => {
         if (data.success) {
-          window.location.href = "index.php?page=home";
+          window.location.href = "/MCQ/home";
         } else {
           alert(data.message);
         }

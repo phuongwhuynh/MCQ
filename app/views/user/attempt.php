@@ -1,3 +1,7 @@
+<?php
+$attemptId = isset($_GET['attempt_id']) ? (int)$_GET['attempt_id'] : null;
+
+?>
 <div class="container py-4">
     <!-- Time Remaining Section -->
     <div class="d-flex justify-content-between align-items-center mb-4">
@@ -29,10 +33,10 @@
 
 
 <div id="attempt-status"></div>
-
 <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const attemptId = urlParams.get("attempt_id");
+    const attemptId= <?= $attemptId ?>;
+</script>
+<script>
     let remainingTime = 0;
     let totalQuestions = 1;
     let currentQuestion = 0;
@@ -101,7 +105,7 @@
         document.getElementById('question-text').textContent = q.description;
         const img = document.getElementById('question-image');
         if (q.image_path) {
-            img.src = "public/"+q.image_path;
+            img.src = "/MCQ/public/"+q.image_path;
             img.classList.remove('d-none');
         } else {
             img.classList.add('d-none');

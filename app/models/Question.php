@@ -143,33 +143,6 @@ public static function cacheAdminCurrentQuestion($description, $ans1, $ans2, $an
         }
     }
 
-    // if ($image_tmp && $fileExt) {
-    //     $fileExt = strtolower($fileExt);
-    //     $uploadPath = "images/current_questions/" . $creator . "." . $fileExt;
-    
-
-    
-    //     $safePath = $conn->real_escape_string($uploadPath);
-    //     $updateQuery = "UPDATE admin_cur_question SET image_path = ? WHERE creator = ?";
-    //     $updateStmt = $conn->prepare($updateQuery);
-    //     $updateStmt->bind_param("si", $safePath, $creator);
-    
-    //     if (!$updateStmt->execute()) {
-    //         $conn->rollback();
-    //         return [
-    //             "success" => false,
-    //             "message" => "Error saving image path for cached question: " . $updateStmt->error
-    //         ];
-    //     }
-    
-    //     if (!copy($image_tmp, $uploadPath)) {
-    //         $conn->rollback();
-    //         return [
-    //             "success" => false,
-    //             "message" => "Temporary question created but could not copy the image. Changes have been discarded."
-    //         ];
-    //     }
-    // }
     
     $conn->commit();
     return [
@@ -219,7 +192,7 @@ public static function getCachedAdminCurrentQuestion($creator) {
 public static function deleteQuestion($question_id){
     $db = Database::connect();
         
-    $query = "UPDATE test SET status = 'deleted' WHERE test_id = ?";
+    $query = "UPDATE question SET status = 'deleted' WHERE question_id = ?";
     
     $stmt = $db->prepare($query);
     $stmt->bind_param("i", $question_id);
@@ -231,6 +204,117 @@ public static function deleteQuestion($question_id){
     }
 
 }
-        
+public static function getPaginated($page, $limit, $sort, $categories, $searchTerm = '', $creator_id) {
+    $db = Database::connect();
+    $offset = ($page - 1) * $limit;
+
+    // Default sorting
+    $orderBy = "created_time DESC";
+
+    // Category filter
+    $inCate = !empty($categories)
+        ? "cate IN (" . implode(',', array_map(fn($x) => "'$x'", $categories)) . ")"
+        : "1=1";
+
+    // Search condition
+    $searchCondition = '';
+    if (!empty($searchTerm)) {
+        $searchCondition = " AND description LIKE ?";
+    }
+
+    // Sorting logic
+    if ($sort === "description_desc") {
+        $orderBy = "description DESC";
+    }
+    elseif ($sort === "description_asc") {
+        $orderBy = "description ASC";
+    } 
+    elseif ($sort === "created_time_asc") {
+        $orderBy = "created_time ASC";
+    }
+
+    // Updated query without the join with admin_cur_test_have_questions
+    $query = "
+        SELECT 
+            q.* 
+        FROM question q
+        WHERE q.creator = ? AND q.status = 'active' AND $inCate $searchCondition
+        ORDER BY $orderBy
+        LIMIT ?, ?
+    ";
+
+    $stmt = $db->prepare($query);
+
+    // Prepare the parameters
+    $types = "iii"; 
+    $params = [$creator_id, $offset, $limit];
+
+    // If there's a search term, adjust the query and parameters
+    if (!empty($searchTerm)) {
+        $searchTerm = "%$searchTerm%";
+        $query = "
+            SELECT 
+                q.* 
+            FROM question q
+            WHERE q.creator = ? AND q.status = 'active' AND $inCate AND description LIKE ?
+            ORDER BY $orderBy
+            LIMIT ?, ?
+        ";
+
+        $stmt = $db->prepare($query);
+        $types = "isii"; // q.creator, searchTerm, offset, limit
+        $params = [$creator_id, $searchTerm, $offset, $limit];
+    }
+
+    // Bind parameters and execute the query
+    $stmt->bind_param($types, ...$params);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    // Collect the results
+    $items = [];
+    while ($row = $result->fetch_assoc()) {
+        $items[] = $row;
+    }
+
+    return $items;
+}
+
+public static function countAllQuestions($categories = [], $searchTerm = '', $creatorId) {
+    $db = Database::connect();
+
+    $query = "SELECT COUNT(*) as total FROM question WHERE creator = ?";
+
+    if (!empty($categories)) {
+        $query .= " AND cate IN (" . implode(",", array_fill(0, count($categories), "?")) . ")";
+    }
+
+    if (!empty($searchTerm)) {
+        $query .= " AND description LIKE ?";
+    }
+
+    $stmt = $db->prepare($query);
+
+    $types = "i";
+    $params = [$creatorId];
+
+    if (!empty($categories)) {
+        $types .= str_repeat("s", count($categories)); 
+        $params = array_merge($params, $categories);
+    }
+
+    if (!empty($searchTerm)) {
+        $searchTerm = "%$searchTerm%";
+        $types .= "s"; 
+        $params[] = $searchTerm;
+    }
+
+    $stmt->bind_param($types, ...$params);
+    $stmt->execute();
+    $result = $stmt->get_result()->fetch_assoc();
+
+    return $result['total'] ?? 0;
+}
+
 }
 ?>

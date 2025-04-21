@@ -2,118 +2,8 @@
 require_once "Database.php";
 
 class Test {
-    public static function getPaginated($page, $limit, $sort, $categories, $searchTerm = '', $creator_id) {
-        $db = Database::connect();
-        $offset = ($page - 1) * $limit;
-    
-        // Default sorting
-        $orderBy = "created_time DESC";
-    
-        // Category filter
-        $inCate = !empty($categories)
-            ? "cate IN (" . implode(',', array_map(fn($x) => "'$x'", $categories)) . ")"
-            : "1=1";
-    
-        // Search condition
-        $searchCondition = '';
-        if (!empty($searchTerm)) {
-            $searchCondition = " AND description LIKE ?";
-        }
-    
-        // Sorting logic
-        if ($sort === "description_desc") {
-            $orderBy = "description DESC";
-        }
-        elseif ($sort === "description_asc") {
-            $orderBy = "description ASC";
-        } 
-        elseif ($sort === "created_time_asc") {
-            $orderBy = "created_time ASC";
-        }
-    
-        // Updated query without the join with admin_cur_test_have_questions
-        $query = "
-            SELECT 
-                q.* 
-            FROM question q
-            WHERE q.creator = ? AND q.status = 'active' AND $inCate $searchCondition
-            ORDER BY $orderBy
-            LIMIT ?, ?
-        ";
-    
-        $stmt = $db->prepare($query);
-    
-        // Prepare the parameters
-        $types = "iii"; 
-        $params = [$creator_id, $offset, $limit];
-    
-        // If there's a search term, adjust the query and parameters
-        if (!empty($searchTerm)) {
-            $searchTerm = "%$searchTerm%";
-            $query = "
-                SELECT 
-                    q.* 
-                FROM question q
-                WHERE q.creator = ? AND q.status = 'active' AND $inCate AND description LIKE ?
-                ORDER BY $orderBy
-                LIMIT ?, ?
-            ";
-    
-            $stmt = $db->prepare($query);
-            $types = "isii"; // q.creator, searchTerm, offset, limit
-            $params = [$creator_id, $searchTerm, $offset, $limit];
-        }
-    
-        // Bind parameters and execute the query
-        $stmt->bind_param($types, ...$params);
-        $stmt->execute();
-        $result = $stmt->get_result();
-    
-        // Collect the results
-        $items = [];
-        while ($row = $result->fetch_assoc()) {
-            $items[] = $row;
-        }
-    
-        return $items;
-    }
     
     
-    public static function countAllQuestions($categories = [], $searchTerm = '', $creatorId) {
-        $db = Database::connect();
-    
-        $query = "SELECT COUNT(*) as total FROM question WHERE creator = ?";
-    
-        if (!empty($categories)) {
-            $query .= " AND cate IN (" . implode(",", array_fill(0, count($categories), "?")) . ")";
-        }
-    
-        if (!empty($searchTerm)) {
-            $query .= " AND description LIKE ?";
-        }
-    
-        $stmt = $db->prepare($query);
-    
-        $types = "i";
-        $params = [$creatorId];
-    
-        if (!empty($categories)) {
-            $types .= str_repeat("s", count($categories)); 
-            $params = array_merge($params, $categories);
-        }
-    
-        if (!empty($searchTerm)) {
-            $searchTerm = "%$searchTerm%";
-            $types .= "s"; 
-            $params[] = $searchTerm;
-        }
-    
-        $stmt->bind_param($types, ...$params);
-        $stmt->execute();
-        $result = $stmt->get_result()->fetch_assoc();
-    
-        return $result['total'] ?? 0;
-    }
     
     // public static function cacheTest($creator, $total_time, $image_tmp = null, $fileExt = null, $question_ids = []) {
     //     $conn = Database::connect();
@@ -761,6 +651,46 @@ class Test {
         return ["status" => "success", "question_id" => $question_id];
     }
     
+    public static function getTestActivity($creator){
+        $db = Database::connect(); 
+        $dates = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $dates[] = date('Y-m-d', strtotime("-$i days"));
+        }
+    
+        // Fetch number of attempts grouped by date
+        $query = "
+            SELECT DATE(ta.start_time) AS attempt_date, COUNT(*) AS total
+            FROM test_attempt ta
+            INNER JOIN test t ON ta.test_id = t.test_id
+            WHERE t.creator = ?
+              AND ta.start_time >= DATE_SUB(CURDATE(), INTERVAL 6 DAY)
+            GROUP BY attempt_date
+        ";
+    
+        $stmt = $db->prepare($query);
+        $stmt->bind_param('i', $creator);
+        $stmt->execute();
+        $result = $stmt->get_result();
+    
+        $attemptsByDate = [];
+        while ($row = $result->fetch_assoc()) {
+            $attemptsByDate[$row['attempt_date']] = (int)$row['total'];
+        }
+    
+        // Fill in missing dates with 0 attempts
+        $finalCounts = [];
+        foreach ($dates as $date) {
+            $finalCounts[] = $attemptsByDate[$date] ?? 0;
+        }
+    
+        return [
+            'date' => $dates,
+            'attemptCounts' => $finalCounts
+        ];
+    
+
+    }
     
 
     

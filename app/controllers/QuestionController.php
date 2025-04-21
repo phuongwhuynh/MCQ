@@ -68,6 +68,30 @@ class QuestionController {
         $response=Question::getCachedAdminCurrentQuestion($_SESSION['user_id']);
         echo json_encode($response);
     }
+    public static function deleteQuestion($data){
+        $question_id=$data['question_id'];
+        $response=Question::deleteQuestion($question_id);
+        echo json_encode($response);
+    }
+    public static function handlePagination() {
+        $limit = 10;
+        $page = isset($_GET['pageNum']) ? (int)$_GET['pageNum'] : 1;
+        $sort = $_GET['sort'] ?? "created_time_desc";
+        $categories = isset($_GET['categories']) ? array_filter(explode(",", $_GET["categories"])) : [];
+        $searchTerm = $_GET['search'] ?? '';
+        $creatorId = $_SESSION['user_id'];
+    
+        $questions = Question::getPaginated($page, $limit, $sort, $categories, $searchTerm, $creatorId);
+        $totalQuestions = Question::countAllQuestions($categories, $searchTerm, $creatorId);
+    
+        $totalPages = ceil($totalQuestions / $limit);
+    
+        header('Content-Type: application/json');
+        echo json_encode([
+            'questions' => $questions,
+            'totalPages' => $totalPages
+        ]);
+    }
     
 }
 ?>

@@ -211,7 +211,7 @@ function fetchQuestions(page = 1) {
         categories: selectedCategories.join(','),
         search: questionSearch
     });
-    fetch(`index.php?controller=test&ajax=1&action=handlePagination&${queryParams.toString()}`, {
+    fetch(`index.php?controller=question&ajax=1&action=handlePagination&${queryParams.toString()}`, {
         method: 'GET'
     })
     .then(response => response.json())
@@ -310,34 +310,56 @@ function fetchQuestions(page = 1) {
         });
 
 
-        renderQuestionPagination(totalPages);
+        renderQuestionPagination(page,totalPages);
     })
     .catch(error => {
         console.error("Error loading questions:", error);
     });
 }
 
-function renderQuestionPagination(totalPages) {
+function renderQuestionPagination(currentPage, totalPages) {
   const paginationContainer = document.getElementById('pagination-controls');
-  paginationContainer.innerHTML = '';
+  paginationContainer.innerHTML = '';  
 
-  const createPageItem = (page, isActive = false) => {
+  const createPageItem = (page, label, isActive = false, isDisabled = false) => {
     const li = document.createElement('li');
-    li.className = `page-item ${isActive ? 'active' : ''}`;
-    li.innerHTML = `<a class="page-link" href="#">${page}</a>`;
+    li.className = `page-item ${isActive ? 'active' : ''} ${isDisabled ? 'disabled' : ''}`;
+    li.innerHTML = `<a class="page-link" href="#">${label}</a>`;
     li.addEventListener('click', (e) => {
       e.preventDefault();
-      if (!isActive) fetchQuestions(page);
+      if (!isDisabled && !isActive) fetchQuestions(page);  
     });
     return li;
   };
 
-  if (totalPages <= 1) return;
+  paginationContainer.appendChild(createPageItem(currentPage - 1, 'Previous', false, currentPage === 1));
 
-  for (let i = 1; i <= totalPages; i++) {
-    paginationContainer.appendChild(createPageItem(i, i === currentQuestionPage));
+  if (totalPages < 5) {
+    for (let i = 1; i <= totalPages; i++) {
+      paginationContainer.appendChild(createPageItem(i, i, i === currentPage));
+    }
+  } else {
+    if (currentPage > 3) {
+      paginationContainer.appendChild(createPageItem(1, 1));
+      paginationContainer.appendChild(createPageItem(0, '...', true));  
+    }
+
+    const startPage = Math.max(currentPage - 2, 2);  
+    const endPage = Math.min(currentPage + 2, totalPages - 1);  
+
+    for (let i = startPage; i <= endPage; i++) {
+      paginationContainer.appendChild(createPageItem(i, i, i === currentPage));
+    }
+
+    if (currentPage < totalPages - 2) {
+      paginationContainer.appendChild(createPageItem(0, '...', true)); 
+      paginationContainer.appendChild(createPageItem(totalPages, totalPages));
+    }
   }
+
+  paginationContainer.appendChild(createPageItem(currentPage + 1, 'Next', false, currentPage === totalPages));
 }
+
 function renderSelectedQuestions() {
     const selectedList = document.getElementById('selected-questions');
     selectedList.innerHTML = '';  // Clear the existing list

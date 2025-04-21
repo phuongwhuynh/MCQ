@@ -1,5 +1,10 @@
-<div class="container mt-5">
+<div class="container mt-4">
+  <div class="d-flex justify-content-start mb-2">
+    <a href="/MCQ/questionbank" class="btn btn-secondary">Return to Question Bank</a>
+  </div>
   <h1 class="text-center mb-4">Multiple Choice Test Form</h1>
+
+
   <form id="testForm">
     <div id="questions">
       <div class="question-container mb-4 border p-3 rounded shadow">
@@ -119,11 +124,13 @@
             </div>
           </div>
         </div>
+        <input type="submit" class="btn btn-success" value="Submit" />
+
       </div>
     </div>
 
-    <input type="submit" class="btn btn-success" value="Submit" />
   </form>
+
 </div>
 
 

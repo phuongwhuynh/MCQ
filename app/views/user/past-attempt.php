@@ -8,13 +8,14 @@ $current_page = isset($_GET['num_page']) ? $_GET['num_page'] : 1;
 
   <div id="question-container"></div>
 
-  <a href="index.php?page=history&num_page=<?php echo $current_page; ?>" class="btn btn-primary mt-3">Back to history</a>
+  <a href="/MCQ/history/<?php echo $current_page; ?>" class="btn btn-primary mt-3">Back to history</a>
 </div>
-
 <script>
-document.addEventListener("DOMContentLoaded", () => {
   const attemptId = <?php echo json_encode($attempt_id); ?>;
   const currentPage = <?php echo json_encode($current_page); ?>;
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
   console.log(attemptId); 
   fetch('index.php', {
     method: 'POST',

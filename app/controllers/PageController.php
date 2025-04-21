@@ -27,7 +27,7 @@ class PageController {
     }
 
     private static function loadUserView($page){
-        $allowedPages = ["home","about","resources","contact","history","dashboard", "past_attempt","preview","attempt","result"];
+        $allowedPages = ["home","about","resources","contact","history","dashboard", "past-attempt","preview","attempt","result"];
         if (!in_array($page, $allowedPages)) {
             require_once "../app/views/404.php";
         }
@@ -38,7 +38,7 @@ class PageController {
     }
 
     private static function loadAdminView($page){
-        $allowedPages = ["home","question","test","manage"];
+        $allowedPages = ["home","addquestion","test","manage","questionbank"];
         if (!in_array($page, $allowedPages)) {
             require_once "../app/views/404.php";
         }

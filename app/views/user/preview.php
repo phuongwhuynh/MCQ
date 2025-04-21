@@ -1,3 +1,9 @@
+<?php
+$returnPage = isset($_GET['return_page']) ? (int)$_GET['return_page'] : 1;
+$testId = isset($_GET['id']) ? (int)$_GET['id'] : null;
+
+?>
+
 <div class="container main-content my-5 border border-2 p-4">
       <div class="d-flex flex-row justify-content-between border-bottom pb-2 mb-3">
         <div class="">
@@ -5,9 +11,11 @@
           <p class="m-0">10 question</p>
         </div>
         <div class="p-2">
-        <button id="backToResourceBtn" type="button" class="btn btn-outline-light text-dark border border-2">
+        <a href="/MCQ/resources/<?= $returnPage ?>" 
+          class="btn btn-outline-light text-dark border border-2" 
+          id="backToResourceBtn">
           Back to resource
-        </button>          
+        </a>
         <button
           type="button"
           class="btn btn-outline-primary border border-2"
@@ -26,22 +34,23 @@
 
       
 </div>
+<script>
+    const testId = <?= $testId !== null ? $testId : 'null' ?>;
+</script>
 
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-  const params = new URLSearchParams(window.location.search);
-  const returnPage = params.get("return_page") || 1;
+// document.addEventListener("DOMContentLoaded", () => {
+//   const params = new URLSearchParams(window.location.search);
+//   const returnPage = params.get("return_page") || 1;
 
-  const backBtn = document.getElementById("backToResourceBtn");
-  if (backBtn) {
-    backBtn.addEventListener("click", () => {
-      window.location.href = `index.php?page=resources&currentPage=${returnPage}`;
-    });
-  }
-});
+//   const backBtn = document.getElementById("backToResourceBtn");
+//   if (backBtn) {
+//     backBtn.addEventListener("click", () => {
+//       window.location.href = `index.php?page=resources&currentPage=${returnPage}`;
+//     });
+//   }
+// });
 document.addEventListener("DOMContentLoaded", () => {
-  const params = new URLSearchParams(window.location.search);
-  const testId = params.get("id");
   console.log(testId)
   if (testId) {
     fetchQuestions(testId);
@@ -91,7 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const hasImage = !!q.imagePath;
       const imageHtml = hasImage
         ? `<div class="mb-3" style="height: 150px; overflow: hidden;">
-            <img src="public/${q.imagePath}" alt="question image" style="width: 100%; height: 100%; object-fit: contain;">
+            <img src="/MCQ/public/${q.imagePath}" alt="question image" style="width: 100%; height: 100%; object-fit: contain;">
           </div>`
         : "";
 
@@ -133,8 +142,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });  }
 });
 function startAttempt() {
-  const params = new URLSearchParams(window.location.search);
-  const testId = params.get("id");
   fetch('index.php', {
     method: 'POST',
     headers: {
@@ -152,7 +159,7 @@ function startAttempt() {
     if (data.status === 'Unauthorized') {
       alert('You must be logged in to attempt a test.');
     } else if (data.status === 'success') {
-      window.location.href = `index.php?page=attempt&attempt_id=${data.attempt_id}`;
+      window.location.href = `/MCQ/attempt/${data.attempt_id}`;
     } else {
       console.error('Unexpected response:', data);
     }

@@ -1,4 +1,4 @@
-<section class="mb-5">
+<section class="mb-4 mt-4">
   <h2 class="h4 mb-3">Manage Tests</h2>
   <div class="card shadow-sm">
     <div class="card-body">
@@ -278,15 +278,15 @@ function fetchTests(page = 1) {
 
 
 
-          // Render pagination
-          pagination.innerHTML = '';
-          for (let i = 1; i <= totalPages; i++) {
-              const li = document.createElement('li');
-              li.className = `page-item ${i === page ? 'active' : ''}`;
-              li.innerHTML = `<button class="page-link">${i}</button>`;
-              li.querySelector('button').addEventListener('click', () => fetchTests(i));
-              pagination.appendChild(li);
-          }
+          renderQuestionPagination(page,totalPages);
+          // pagination.innerHTML = '';
+          // for (let i = 1; i <= totalPages; i++) {
+          //     const li = document.createElement('li');
+          //     li.className = `page-item ${i === page ? 'active' : ''}`;
+          //     li.innerHTML = `<button class="page-link">${i}</button>`;
+          //     li.querySelector('button').addEventListener('click', () => fetchTests(i));
+          //     pagination.appendChild(li);
+          // }
 
       } else {
           container.innerHTML = `<tr><td colspan="6" class="text-center">${data.message || "No tests found."}</td></tr>`;
@@ -335,6 +335,48 @@ document.addEventListener("DOMContentLoaded", function () {
   fetchTests();
 });
 
+function renderQuestionPagination(currentPage, totalPages) {
+  const paginationContainer = document.getElementById('pagination-controls');
+  paginationContainer.innerHTML = '';  
+
+  const createPageItem = (page, label, isActive = false, isDisabled = false) => {
+    const li = document.createElement('li');
+    li.className = `page-item ${isActive ? 'active' : ''} ${isDisabled ? 'disabled' : ''}`;
+    li.innerHTML = `<button class="page-link">${label}</button>`;
+    li.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (!isDisabled && !isActive) fetchTests(page);  
+    });
+    return li;
+  };
+
+  paginationContainer.appendChild(createPageItem(currentPage - 1, 'Previous', false, currentPage === 1));
+
+  if (totalPages < 5) {
+    for (let i = 1; i <= totalPages; i++) {
+      paginationContainer.appendChild(createPageItem(i, i, i === currentPage));
+    }
+  } else {
+    if (currentPage > 3) {
+      paginationContainer.appendChild(createPageItem(1, 1));
+      paginationContainer.appendChild(createPageItem(0, '...', true));  
+    }
+
+    const startPage = Math.max(currentPage - 2, 2);  
+    const endPage = Math.min(currentPage + 2, totalPages - 1);  
+
+    for (let i = startPage; i <= endPage; i++) {
+      paginationContainer.appendChild(createPageItem(i, i, i === currentPage));
+    }
+
+    if (currentPage < totalPages - 2) {
+      paginationContainer.appendChild(createPageItem(0, '...', true)); 
+      paginationContainer.appendChild(createPageItem(totalPages, totalPages));
+    }
+  }
+
+  paginationContainer.appendChild(createPageItem(currentPage + 1, 'Next', false, currentPage === totalPages));
+}
 
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>

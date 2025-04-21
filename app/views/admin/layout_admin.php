@@ -13,10 +13,10 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
 
-    <link rel="stylesheet" href="public/css/layout.css">
+    <link rel="stylesheet" href="/MCQ/public/css/layout.css">
     <?php 
-        $cssWebPath = "public/css/$page.css"; 
-        $jsPath="public/js/$page.js";
+        $cssWebPath = "/MCQ/public/css/$page.css"; 
+        $jsPath="/MCQ/public/js/$page.js";
     ?>
     <link rel="stylesheet" href="<?php echo $cssWebPath; ?>">
     <script src="<?php echo $jsPath?>" defer></script>
@@ -61,23 +61,23 @@
 
             <ul class="nav flex-column mt-4 w-100">
               <li class="nav-item">
-                <a class="nav-link <?php echo ($page == 'home_admin') ? 'text-primary' : 'text-dark'; ?> text-center" href="index.php?page=home">
+                <a class="nav-link <?php echo ($page == 'home_admin') ? 'text-primary' : 'text-dark'; ?> text-center" href="/MCQ/home">
                   <i class="fas fa-home mr-2"></i> HOME
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link <?php echo ($page == 'question_admin') ? 'text-primary' : 'text-dark'; ?> text-center" href="index.php?page=question">
-                  <i class="fas fa-pen mr-2"></i> CREATE QUESTION
+                <a class="nav-link <?php echo ($page == 'questionbank_admin') ? 'text-primary' : 'text-dark'; ?> text-center" href="/MCQ/questionbank">
+                  <i class="fas fa-clipboard-list mr-2"></i> QUESTION BANK
                 </a>
               </li>
             
               <li class="nav-item">
-                <a class="nav-link <?php echo ($page == 'test_admin') ? 'text-primary' : 'text-dark'; ?> text-center" href="index.php?page=test">
+                <a class="nav-link <?php echo ($page == 'test_admin') ? 'text-primary' : 'text-dark'; ?> text-center" href="/MCQ/test">
                 <i class="fas fa-pen mr-2"></i> CREATE TEST
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link <?php echo ($page == 'manage_admin') ? 'text-primary' : 'text-dark'; ?> text-center" href="index.php?page=manage">
+                <a class="nav-link <?php echo ($page == 'manage_admin') ? 'text-primary' : 'text-dark'; ?> text-center" href="/MCQ/manage">
                   <i class="fas fa-cog mr-2"></i> MANAGE
                 </a>
               </li>
