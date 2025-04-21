@@ -46,7 +46,6 @@ if ($_SERVER["REQUEST_METHOD"] === "GET" && isset($_GET['ajax']) && $_GET['ajax'
 
 else {
     
-
     $page = isset($_GET['page']) ? $_GET['page'] : 'home';
     PageController::loadPage($page);
 }

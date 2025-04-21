@@ -108,7 +108,6 @@ INSERT INTO category (cate) VALUES ('Math'),('Literature'),('Science'),('History
 
 
 
-
 DROP TABLE IF EXISTS test_attempt;
 CREATE TABLE test_attempt(
 	attempt_id INT UNSIGNED PRIMARY KEY auto_increment,
@@ -145,3 +144,7 @@ END$$
 DELIMITER ;
 
 SELECT * from test;
+
+ALTER TABLE users
+ADD COLUMN google_id VARCHAR(255) UNIQUE AFTER email,
+ALTER COLUMN password_hash VARCHAR(255) NULL;

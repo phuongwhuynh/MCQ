@@ -23,46 +23,7 @@
       </div>
 
 
-      <!-- <div class="question">
-        <div class="d-flex flex-row justify-content-between mb-4">
-          <p class="m-0">1. MULTIPLE CHOICE</p>
 
-          <button type="button" class="btn btn-outline-light text-dark border border-2">+ Add</button>
-        </div>
-
-        <img src="https://picsum.photos/100/100" alt="">
-
-        <p class="my-3">
-          <b>1 + 1 =</b>
-        </p>
-
-        <div class="row mx-0 my-2">
-          <div class="form-check col">
-            <input type="radio" class="form-check-input" id="" name="optradio" value="option1">Option 1
-            <label class="form-check-label" for="radio1"></label>
-          </div>
-
-          <div class="form-check col">
-            <input type="radio" class="form-check-input" id="" name="optradio" value="option1">Option 2
-            <label class="form-check-label" for="radio1"></label>
-          </div>
-        </div>
-
-        <div class="row mx-0 my-2">
-          <div class="form-check col">
-            <input type="radio" class="form-check-input" id="" name="optradio" value="option1">Option 1
-            <label class="form-check-label" for="radio1"></label>
-          </div>
-
-          <div class="form-check col">
-            <input type="radio" class="form-check-input" id="" name="optradio" value="option1">Option 2
-            <label class="form-check-label" for="radio1"></label>
-          </div>
-        </div>
-      </div>
-
-      <hr>
- --> 
       
 </div>
 

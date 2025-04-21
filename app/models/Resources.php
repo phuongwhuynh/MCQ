@@ -27,7 +27,7 @@ class Resources {
         } elseif ($sort === "created_time_desc") {
             $orderBy = "t.created_time DESC";
         } elseif ($sort === "title_asc") {
-            $orderBy = "t.test_name AS";
+            $orderBy = "t.test_name ASC";
         } elseif ($sort === "title_desc") {
             $orderBy = "t.test_name DESC";
         } 

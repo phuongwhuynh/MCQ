@@ -60,7 +60,7 @@ class Test {
             ";
     
             $stmt = $db->prepare($query);
-            $types = "issii"; // q.creator, searchTerm, offset, limit
+            $types = "isii"; // q.creator, searchTerm, offset, limit
             $params = [$creator_id, $searchTerm, $offset, $limit];
         }
     
