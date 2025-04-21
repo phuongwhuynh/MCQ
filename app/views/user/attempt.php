@@ -3,7 +3,6 @@ $attemptId = isset($_GET['attempt_id']) ? (int)$_GET['attempt_id'] : null;
 
 ?>
 <div class="container py-4">
-    <!-- Time Remaining Section -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div class="font-weight-bold p-3 border rounded" style="background-color: #f8f9fa; text-align: center; white-space: nowrap;">
             Time Remaining: <span id="timer">Loading...</span>
@@ -15,16 +14,13 @@ $attemptId = isset($_GET['attempt_id']) ? (int)$_GET['attempt_id'] : null;
         </div>
     </div>
 
-    <!-- Question Container -->
     <div id="question-container" class="mb-4 border shadow-sm p-4 rounded" style="background-color: #f8f9fa;">
         <h5 id="question-text" class="font-weight-bold text-dark">Loading question...</h5>
-        <!-- Centered Image -->
         <img id="question-image" class="img-fluid my-3 d-none rounded mx-auto d-block" style="max-width: 100%; max-height: 300px; object-fit: contain;" />
         <!-- Answers Section -->
         <div id="answers" class="list-group shadow-sm rounded"></div>
     </div>
 
-    <!-- Next Button -->
     <button class="btn btn-primary btn-block" id="next-button" disabled>Next Question</button>
 </div>
 
@@ -33,6 +29,7 @@ $attemptId = isset($_GET['attempt_id']) ? (int)$_GET['attempt_id'] : null;
 
 
 <div id="attempt-status"></div>
+
 <script>
     const attemptId= <?= $attemptId ?>;
 </script>
@@ -152,19 +149,26 @@ $attemptId = isset($_GET['attempt_id']) ? (int)$_GET['attempt_id'] : null;
             if (data && data.finished) {
                     // Show modal with result
                     const modalContent = `
-                        <div class="modal fade" id="resultModal" tabindex="-1" aria-labelledby="resultModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="resultModalLabel">Test Completed</h5>
-                            </div>
-                            <div class="modal-body text-center">
-                                <p><strong>Correct Answers:</strong> ${data.correct_answers} / ${data.total_questions}</p>
-                            </div>
-                            <a href="index.php?page=home" class="btn btn-primary">Return to home page</a>
-                            </div>
+                    <div class="modal fade" id="resultModal" tabindex="-1" aria-labelledby="resultModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                        
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="resultModalLabel">Test Completed</h5>
                         </div>
+
+                        <div class="modal-body text-center">
+                            <p><strong>Correct Answers:</strong> ${data.correct_answers} / ${data.total_questions}</p>
                         </div>
+
+                        <div class="modal-footer justify-content-center">
+                            <a href="/MCQ/home" class="btn btn-primary">Return to Home Page</a>
+                        </div>
+
+                        </div>
+                    </div>
+                    </div>
+
                     `;
                     document.body.insertAdjacentHTML('beforeend', modalContent);
                     const resultModal = new bootstrap.Modal(document.getElementById('resultModal'));
