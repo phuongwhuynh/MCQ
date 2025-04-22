@@ -6,7 +6,7 @@
   <div class="row text-center mb-4">
     <div class="col-12">
       <h2 class="fw-bold">Explore Our Exam</h2>
-      <button class="btn btn-outline-dark">Explore All</button>
+      <a href="/MCQ/resources" class="btn btn-outline-dark">Explore All</a>
     </div>
   </div>
   <div class="row">
