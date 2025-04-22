@@ -8,7 +8,8 @@ $testId = isset($_GET['id']) ? (int)$_GET['id'] : null;
       <div class="d-flex flex-row justify-content-between border-bottom pb-2 mb-3">
         <div class="">
           <h6>Test 1</h6>
-          <p class="m-0">10 question</p>
+          <p class="m-0">10 question - 10 minutes</p>
+          <!-- <p id="total-time"></p> -->
         </div>
         <div class="p-2">
         <a href="/MCQ/resources/<?= $returnPage ?>" 
@@ -39,17 +40,7 @@ $testId = isset($_GET['id']) ? (int)$_GET['id'] : null;
 </script>
 
 <script>
-// document.addEventListener("DOMContentLoaded", () => {
-//   const params = new URLSearchParams(window.location.search);
-//   const returnPage = params.get("return_page") || 1;
 
-//   const backBtn = document.getElementById("backToResourceBtn");
-//   if (backBtn) {
-//     backBtn.addEventListener("click", () => {
-//       window.location.href = `index.php?page=resources&currentPage=${returnPage}`;
-//     });
-//   }
-// });
 document.addEventListener("DOMContentLoaded", () => {
   console.log(testId)
   if (testId) {
@@ -76,10 +67,10 @@ document.addEventListener("DOMContentLoaded", () => {
         // Update test name and question count
         const testNameEl = document.querySelector(".main-content h6");
         const questionCountEl = document.querySelector(".main-content p");
-
         if (testNameEl && questionCountEl) {
           testNameEl.textContent = data.test_name;
-          questionCountEl.textContent = `${data.number_of_questions} questions`;
+          questionCountEl.textContent = `${data.number_of_questions} questions - `;
+          questionCountEl.textContent+=`${data.total_time} minutes`; 
         }
 
         // Render questions
@@ -109,7 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
           ${imageHtml}
 
           <p class="my-3">
-            <b>${q.question_number} ${q.description}</b>
+            <b>${q.question_number}. ${q.description}</b>
           </p>
 
           <div class="row mx-0 my-2">

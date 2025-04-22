@@ -59,7 +59,7 @@ function renderAttempts(attempts, page) {
     const badgeClass = percent < 50 ? 'bg-danger' : 'bg-success'; // 🔥 red if < 50%
 
     const html = `
-      <a href="past-attempt/${item.attempt_id}/${page}"
+      <a href="/MCQ/past-attempt/${item.attempt_id}/${page}"
          class="list-group-item list-group-item-action d-flex justify-content-between align-items-center shadow-sm">
         <div>
           <h5 class="mb-1">${item.test_name}</h5>

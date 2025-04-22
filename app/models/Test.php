@@ -414,7 +414,7 @@ class Test {
         $db = Database::connect();
     
         // First, get test information
-        $testQuery = "SELECT test_name, number_of_questions FROM test WHERE test_id = ?";
+        $testQuery = "SELECT test_name, total_time, number_of_questions FROM test WHERE test_id = ?";
         $testInfo = null;
     
         if ($stmtTest = $db->prepare($testQuery)) {
@@ -463,6 +463,7 @@ class Test {
     
         return [
             'test_name' => $testInfo['test_name'],
+            'total_time' =>$testInfo['total_time'],
             'number_of_questions' => $testInfo['number_of_questions'],
             'questions' => $questions
         ];
